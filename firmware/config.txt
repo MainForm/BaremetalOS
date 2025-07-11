@@ -1,6 +1,0 @@
-start_file=start4.elf
-fixup_file=fixup4.dat
-
-kernel=image
-
-arm_64bit=1
