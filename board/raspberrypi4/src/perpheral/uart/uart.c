@@ -13,16 +13,13 @@ void UART_Initialize(uint32_t baudrate){
     WRITE_REG_32(BCM2711_UART0_CR, 0x0);
 
     // Get the BaudRateDivider
-    // double BRD = (UART0_CLK)/(16.0 * baudrate);
+    double BRD = (UART0_CLK)/(16.0 * baudrate);
     
-    // UART_SetIBRD((uint32_t)BRD);
+    WRITE_REG_32(BCM2711_UART0_IBRD, (uint32_t)BRD);
 
-    // // Remove the real part of BRD
-    // BRD -= (uint32_t)BRD;
-    // UART_SetFBRD((uint32_t)(BRD * 64.0 + 0.5));
-
-    WRITE_REG_32(BCM2711_UART0_IBRD, 26);
-    WRITE_REG_32(BCM2711_UART0_FBRD, 3);
+    // Remove the real part of BRD
+    BRD -= (uint32_t)BRD;
+    WRITE_REG_32(BCM2711_UART0_FBRD, (uint32_t)(BRD * 64.0 + 0.5));
 
     // set the word length to 8bits and enable the FIFOs
     WRITE_REG_32(BCM2711_UART0_LCRH, UART_WLEN_8BIT | UART_FEN);

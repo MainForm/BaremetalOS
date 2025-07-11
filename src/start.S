@@ -53,10 +53,21 @@ _start:
     MSR spsr_el2, x0
     
     // ELR_EL2: Exception Link
-    LDR x0, =main
+    LDR x0, =prev_main
     MSR elr_el2, x0
 
     ERET
+
+.global prev_main
+prev_main:
+    // enable the FPU and the SIMD to make it possible to use floating-point
+    MRS x0, cpacr_el1
+    ORR x0, x0, #(0b11 << 20)
+    MSR cpacr_el1, x0
+    ISB
+
+    // Branch to main function
+    BL main
 
 halt:
     wfe
