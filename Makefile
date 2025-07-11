@@ -21,6 +21,8 @@ LD_SCRIPT = linker.ld
 ASFLAG = -c -g
 CFLAG = -c -g -Wall -O0
 
+INCLUDE_DIRS = -Iinclude
+
 TARGET = image
 
 ELF_FILE = kernel.elf
@@ -43,7 +45,7 @@ $(AS_OBJS): $(BUILD_DIR)/%.os: $(SRC_DIR)/%.S
 
 $(C_OBJS): $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)
-	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) -o $@ $<
+	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) $(INCLUDE_DIRS) -o $@ $<
 
 clean:
 	@rm -rf $(BUILD_DIR)
