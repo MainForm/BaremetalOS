@@ -2,6 +2,7 @@
 #define __BCM2711_GPIO_H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define GPIO_FUNC_INPUT     ((uint32_t)0x00)
 #define GPIO_FUNC_OUTPUT    ((uint32_t)0x01)
@@ -13,6 +14,6 @@
 #define GPIO_FUNC_ALT5      ((uint32_t)0x02)
 
 void GPIO_SelectFunction(uint32_t pin, uint32_t function);
-void GPIO_SetOutput(uint32_t pin,uint32_t value);
+void GPIO_SetOutput(uint32_t pin,bool value);
 
 #endif
