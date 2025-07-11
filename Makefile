@@ -27,13 +27,16 @@ TARGET = image
 
 ELF_FILE = kernel.elf
 
+FIRMWARE_DIR = firmware
+
 .PHONY: all clean
 
 all: $(TARGET)
 
 $(TARGET): $(ELF_FILE)
-	@mkdir -p $(BUILD_DIR)
-	$(OBJCOPY) -O binary $(BUILD_DIR)/$< $(BUILD_DIR)/$@
+	@mkdir -p $(BUILD_DIR)/output
+	$(OBJCOPY) -O binary $(BUILD_DIR)/$< $(BUILD_DIR)/output/$@
+	cp $(FIRMWARE_DIR)/* $(BUILD_DIR)/output/
 
 $(ELF_FILE): $(AS_OBJS) $(C_OBJS)
 	@mkdir -p $(BUILD_DIR)
