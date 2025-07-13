@@ -27,6 +27,8 @@ void UART_Initialize(uint32_t baudrate){
     // set Recv and Trans FIFO level to 1/2
     WRITE_REG_32(BCM2711_UART0_IFLS, UART_RXFLSEL_1DIV2 | UART_TXFLSEL_1DIV2);
 
+    // Enable the transmission data and the reception data
+    // Enable the UART0
     WRITE_REG_32(BCM2711_UART0_CR, UART_TXE | UART_RXE | UART_UARTEN);
 }
 
@@ -34,4 +36,12 @@ void UART_SendWord(uint8_t data){
     while(READ_REG_32(BCM2711_UART0_FR) & UART_TXFF);
 
     WRITE_REG_32(BCM2711_UART0_DR, data);
+}
+
+void UART_SendString(const char * str){
+    while(*str != '\0'){
+        UART_SendWord((uint8_t)*str);
+
+        ++str;
+    }
 }

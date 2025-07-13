@@ -34,5 +34,6 @@
 void UART_Initialize(uint32_t baudrate);
 
 void UART_SendWord(uint8_t data);
+void UART_SendString(const char * str);
 
 #endif
