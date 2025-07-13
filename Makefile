@@ -6,13 +6,18 @@ MCPU = cortex-a72
 TARGET_BOARD = raspberrypi4
 
 # Compiler for aarch64
-AS = aarch64-linux-gnu-as
-CC = aarch64-linux-gnu-gcc
-LD = aarch64-linux-gnu-ld
-OBJCOPY = aarch64-linux-gnu-objcopy
+TOOLCHAIN_PREFIX = aarch64-none-elf
+AS = $(TOOLCHAIN_PREFIX)-as
+CC = $(TOOLCHAIN_PREFIX)-gcc
+LD = $(TOOLCHAIN_PREFIX)-gcc
+OBJCOPY = $(TOOLCHAIN_PREFIX)-objcopy
 
 ASFLAG = -c -g
-CFLAG = -c -g -Wall -O0
+CFLAG  = -c -g -Wall -O2
+# This options are for the bare metal environment
+LDFLAG = -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -fno-stack-protector
+
+INCLUDE_DIRS = -Iinclude -I$(BOARD_DIR)/include -Ilib/newlib/$(TOOLCHAIN_PREFIX)/include
 
 SRC_DIR = src
 BOARD_DIR = board/$(TARGET_BOARD)
@@ -21,8 +26,6 @@ BOARD_SRC_DIR = $(BOARD_DIR)/src
 FIRMWARE_DIR = $(BOARD_DIR)/firmware
 
 BUILD_DIR = build
-
-INCLUDE_DIRS = -Iinclude -I$(BOARD_DIR)/include
 
 AS_SRCS = $(shell find $(SRC_DIR) -name '*.S')
 AS_OBJS = $(AS_SRCS:$(SRC_DIR)/%.S=$(BUILD_DIR)/%.os)
@@ -49,7 +52,7 @@ $(TARGET): $(ELF_FILE)
 
 $(ELF_FILE): $(AS_OBJS) $(C_OBJS) $(BOARD_C_OBJS)
 	@mkdir -p $(BUILD_DIR)
-	$(LD) -T $(LD_SCRIPT) -o $(BUILD_DIR)/$@ $^
+	$(LD) $(LDFLAG) -T $(LD_SCRIPT) -o $(BUILD_DIR)/$@ $^
 
 $(AS_OBJS): $(BUILD_DIR)/%.os: $(SRC_DIR)/%.S
 	@mkdir -p $(BUILD_DIR)
