@@ -13,22 +13,15 @@ void delay(){
 }
 
 int main(){
-    int num = 0xABCD;
-    char buf[10] = "";
-
     GPIO_SelectFunction(LED_PIN,GPIO_FUNC_OUTPUT);
     UART_Initialize(115200);
 
+    GPIO_SetOutput(LED_PIN,true);
+
     while(1){
-        GPIO_SetOutput(LED_PIN,1);
-        itoa(num,buf,16);
-        UART_SendString(buf);
-
-        delay();
-
-        GPIO_SetOutput(LED_PIN,0);
-
-        delay();
+        uint8_t data = UART_ReceiveWord();
+        
+        UART_SendWord(data);
     }
 
     return 0;

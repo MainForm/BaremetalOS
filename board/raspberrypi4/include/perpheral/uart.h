@@ -4,21 +4,33 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// Default UART0 clock
 #define UART0_CLK               (48000000)
 
+// DR(Data Register) Register bits
+#define UART_OE                 (0x01 << 11)
+#define UART_BE                 (0x01 << 10)
+#define UART_PE                 (0x01 << 9)
+#define UART_FE                 (0x01 << 8)
+#define UART_DATA               (0xFF)
+
+// CR(Control Register) Register bits
 #define UART_RXE                (0x01 << 9)
 #define UART_TXE                (0x01 << 8)
 #define UART_UARTEN             (0x01)
 
+// FR(Flag Register) Register bits
 #define UART_TXFF               (0x01 << 5)
+#define UART_RXFE               (0x01 << 4)
 
+// LCRH(Line Control Register) Register bits
 #define UART_WLEN_8BIT          (0x03 << 5)
 #define UART_WLEN_7BIT          (0x02 << 5)
 #define UART_WLEN_6BIT          (0x01 << 5)
 #define UART_WLEN_5BIT          (0x00 << 5)
-
 #define UART_FEN                (0x01 << 4)
 
+// IFLS(Interrupt FIFO Level Select) Register bits
 #define UART_RXFLSEL_1DIV8      (0x00 << 3)
 #define UART_RXFLSEL_1DIV4      (0x01 << 3)
 #define UART_RXFLSEL_1DIV2      (0x02 << 3)
@@ -34,6 +46,8 @@
 void UART_Initialize(uint32_t baudrate);
 
 void UART_SendWord(uint8_t data);
+uint8_t UART_ReceiveWord();
+
 void UART_SendString(const char * str);
 
 #endif
