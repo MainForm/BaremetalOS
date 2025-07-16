@@ -16,7 +16,7 @@ SECTIONS
         *(.text*)
         *(.rodata*) 
     } > RAM
-    
+
     /* 
      * The start address of the vector table must be aligned to 0x800 (i.e., bits [0:10] = 0).
      * Because bits 0–10 in VBAR_EL1 are reserved. 
@@ -29,9 +29,11 @@ SECTIONS
         *(.data*) 
     } > RAM
 
-    .bss : { 
+    .bss : {
+        __bss_start__ = .;
         *(.bss*)
         *(COMMON) 
+        __bss_end__ = .;
     } > RAM
 
         /* stack section */
