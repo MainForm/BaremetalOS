@@ -16,6 +16,14 @@ SECTIONS
         *(.text*)
         *(.rodata*) 
     } > RAM
+    
+    /* 
+     * The start address of the vector table must be aligned to 0x800 (i.e., bits [0:10] = 0).
+     * Because bits 0–10 in VBAR_EL1 are reserved. 
+     */
+    .vector ALIGN(0x800) : {
+        KEEP(*(.vector))
+    } > RAM
 
     .data : { 
         *(.data*) 
@@ -33,12 +41,12 @@ SECTIONS
 
         /* 
             Assign 16Kib per 1 CPU core.
-            The count of cores in BCM2711 is 10.
+            The count of cores in BCM2711 is 4.
 
-            So, Assign 128Kib to EL1 stack memory
+            So, Assign 64Kib to EL1 stack memory
         */
         __stack_EL1_bottom = .;
-        . = . + (128K);
+        . = . + (16K * 4);
         __stack_EL1_top = .;
 
         /* Guard page for EL1 */
@@ -51,7 +59,7 @@ SECTIONS
             So, Assign 320Kib to EL0 stack memory
         */
          __stack_EL0_bottom = .;
-        . = . + (320K);
+        . = . + (32K * 10);
         __stack_EL0_top = .;
 
         /* Guard page for EL0 */
