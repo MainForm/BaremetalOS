@@ -3,10 +3,7 @@
 
 #include <stdint.h>
 
-// Write the value to the destination(DEST) address only 32 bits
-#define WRITE_REG_32(DEST, VALUE)    (*((volatile uint32_t*)DEST) = (uint32_t)VALUE)
-
 // Read the value from the source address only 32 bits
-#define READ_REG_32(SOURCE)           ((uint32_t)*((volatile uint32_t*)SOURCE))
+#define REG_32(SOURCE)           (*((volatile uint32_t*)SOURCE))
 
 #endif
