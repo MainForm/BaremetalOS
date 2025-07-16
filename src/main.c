@@ -1,30 +1,33 @@
-#include <stdint.h>
 #include <stdlib.h>
 
+#include "perpheral/gpio.h"
+#include "perpheral/interrupt.h"
 #include "perpheral/uart.h"
-#include "perpheral/gic-400.h"
 
 #define LED_PIN             (21)
 
-void delay(volatile int i){
+uint32_t test;
+
+void UART_IRQ_RecvData_callback(){
+    uint8_t data = UART_ReceiveWord();
+    UART_SendWord(data);
+}
+
+void delay(volatile uint32_t i){
     while(i-- > 0);
 }
 
 int main(){
-    uint32_t gic_id = 0;
-    char buf[16];
+    GPIO_SelectFunction(LED_PIN, GPIO_FUNC_OUTPUT);
+
+    IRQ_Initialize();
 
     UART_Initialize(115200);
+    UART_EnableInterrupt(UART_RXIM, UART_IRQ_RecvData_callback);
+
+    GPIO_SetOutput(LED_PIN,true);
 
     while(1){
-        // You need to read 0x200143B from the GIC to confirm that it’s functioning correctly.
-        gic_id = GIC400_GetDistID();
-        itoa(gic_id,buf,16);
-        UART_SendString("GIC-400 ID : ");
-        UART_SendString(buf);
-        UART_SendWord('\n');
-
-        delay(0x1000000);
     }
 
     return 0;

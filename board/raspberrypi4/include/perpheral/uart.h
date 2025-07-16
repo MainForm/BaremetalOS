@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "perpheral/interrupt.h"
+
 // Default UART0 clock
 #define UART0_CLK               (48000000)
 
@@ -43,7 +45,19 @@
 #define UART_TXFLSEL_3DIV4      (0x03)
 #define UART_TXFLSEL_7DIV8      (0x04)
 
+// MIS(Masked Interrupt Status) Register bits
+#define UART_RXMIS              (0x01 << 4)
+
+// IMMSC(Interrupt Mask Set Clear) Register bits
+#define UART_RTIM               (0x01 << 6)
+#define UART_TXIM               (0x01 << 5)
+#define UART_RXIM               (0x01 << 4)
+
+
+#define UART_IRQ_COUNT          (11)
+
 void UART_Initialize(uint32_t baudrate);
+void UART_EnableInterrupt(uint32_t uartIRQ, IRQ_Handler_Callback callback);
 
 void UART_SendWord(uint8_t data);
 uint8_t UART_ReceiveWord();
