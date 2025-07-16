@@ -1,0 +1,44 @@
+#include "perpheral/interrupt.h"
+#include "perpheral/gic-400.h"
+
+#include "perpheral/uart.h"
+
+#include <stddef.h>
+
+static IRQ_Handler_Callback IRQ_Handler_Callbacks[64] = {0,};
+
+void IRQ_Initialize(){
+    GIC400_Initialize();
+
+    IRQ_Enable();
+}
+
+void IRQ_Enable(){
+    __asm__ volatile(
+        "MSR DAIFClr, #2    \n"
+        "ISB                \n"
+    );
+}
+
+bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback){
+
+    if(IRQ_IsEnableInterrupt(irq_num) == false){
+        GIC400_EnableInterrupt(IRQ_VC_IRQ_BASE + irq_num);
+    }
+
+    IRQ_Handler_Callbacks[irq_num] = callback;
+
+    return true;
+}
+
+bool IRQ_IsEnableInterrupt(int irq_num){
+    return IRQ_Handler_Callbacks[irq_num] != NULL ? true : false;
+}
+
+void IRQ_CallHandlerCallback(int irq_num){
+    if(IRQ_Handler_Callbacks[irq_num] == NULL){
+        return;
+    }
+
+    IRQ_Handler_Callbacks[irq_num]();
+}
