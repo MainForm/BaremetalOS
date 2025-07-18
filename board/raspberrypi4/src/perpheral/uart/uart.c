@@ -21,10 +21,10 @@ static void UART_HandlingIRQ(void){
     }
 }
 
-void UART_Initialize(uint32_t baudrate){
+void UART_Initialize(BCM2711_GPIO* gpio, uint32_t baudrate){
     // set the pin 14 and pin 15 to ALT0
-    GPIO_SelectFunction(14,GPIO_FUNC_ALT0);
-    GPIO_SelectFunction(15,GPIO_FUNC_ALT0);
+    BCM2711_GPIO_SelectFunction(gpio, 14,FSEL_FUNC_ALT0);
+    BCM2711_GPIO_SelectFunction(gpio, 15,FSEL_FUNC_ALT0);
 
     // disable the UART0
     REG_32(BCM2711_UART0_CR) = 0x0;

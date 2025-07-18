@@ -1,19 +1,23 @@
-#include "bcm2711_peripheral.h"
 #include "perpheral/gpio.h"
 
-#include "memory.h"
+BCM2711_GPIO* BCM2711_GPIO_Initialize(){
+    return (BCM2711_GPIO*)BCM2711_GPIO_BASE;
+}
 
-void GPIO_SelectFunction(uint32_t pin, uint32_t function){
-    volatile uint32_t * GPSEL_base = BCM2711_GPIO_GPFSEL0;
+void BCM2711_GPIO_SelectFunction(BCM2711_GPIO* gpio,uint32_t pin,FSEL_FUNC function){
+    volatile uint32_t * GPSEL_base = &gpio->GPFSEL0.value;
 
     uint32_t regIndex = (pin / 10);
     uint32_t shiftCount = (pin % 10) * 3;
 
-    REG_32(GPSEL_base + regIndex) |= ((function & 0x07) << shiftCount);
+    volatile uint32_t* target_GPSEL = GPSEL_base + regIndex;
+
+    *target_GPSEL |= (function << shiftCount);
 }
 
-void GPIO_SetOutput(uint32_t pin,bool value){
-    volatile uint32_t * Reg = (value == false ? BCM2711_GPIO_GPCLR0 : BCM2711_GPIO_GPSET0);
+void BCM2711_GPIO_SetOutput(BCM2711_GPIO* gpio,uint32_t pin,bool value){
+    volatile uint32_t * Reg_base = (value == false ? &gpio->GPCLR0.value : &gpio->GPSET0.value);
+    volatile uint32_t * target_Reg = Reg_base + (pin / 32);
 
-    REG_32(Reg + (pin / 32)) = (1 << (pin % 32));
+    *target_Reg = (1 << (pin % 32));
 }
