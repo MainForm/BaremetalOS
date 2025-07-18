@@ -5,7 +5,8 @@
 
 #include <stddef.h>
 
-static IRQ_Handler_Callback IRQ_Handler_Callbacks[64] = {0,};
+static IRQ_Handler_Callback IRQ_Handler_Callbacks[64];
+static void* IRQ_Handler_data[64];
 
 void IRQ_Initialize(){
     GIC400_Initialize();
@@ -20,14 +21,14 @@ void IRQ_Enable(){
     );
 }
 
-bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback){
+bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback,void * data){
 
     if(IRQ_IsEnableInterrupt(irq_num) == false){
         GIC400_EnableInterrupt(IRQ_VC_IRQ_BASE + irq_num);
     }
 
     IRQ_Handler_Callbacks[irq_num] = callback;
-
+    IRQ_Handler_data[irq_num] = data;
     return true;
 }
 
@@ -40,5 +41,5 @@ void IRQ_CallHandlerCallback(int irq_num){
         return;
     }
 
-    IRQ_Handler_Callbacks[irq_num]();
+    IRQ_Handler_Callbacks[irq_num](IRQ_Handler_data[irq_num]);
 }

@@ -9,12 +9,12 @@
 #define IRQ_VC_IRQ_BASE     (96)
 #define IRQ_UART_NUM        (57)
 
-typedef void (*IRQ_Handler_Callback)(void);
+typedef void (*IRQ_Handler_Callback)(void *);
 
 void IRQ_Initialize();
 void IRQ_Enable();
 bool IRQ_IsEnableInterrupt(int irq_num);
-bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback);
+bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback,void* data);
 void IRQ_CallHandlerCallback(int irq_num);
 
 #endif

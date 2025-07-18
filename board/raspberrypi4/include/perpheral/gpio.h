@@ -149,12 +149,16 @@ typedef volatile struct __BCM2711_GPIO{
     GPFSEL4_REG GPFSEL4;        // Offset : 0x10
     GPFSEL5_REG GPFSEL5;        // Offset : 0x14
 
-    uint32_t padding0;          // Offset : 0x18
+    struct{ 
+        uint32_t    :32;        // Offset : 0x18
+    };
 
     GPSET0_REG  GPSET0;         // Offset : 0x1C
     GPSET1_REG  GPSET1;         // Offset : 0x20
 
-    uint32_t padding1;          // Offset : 0x24
+    struct{
+        uint32_t    :32;        // Offset : 0x24
+    };
 
     GPCLR0_REG  GPCLR0;         // Offset : 0x28
     GPCLR1_REG  GPCLR1;         // Offset : 0x2C
