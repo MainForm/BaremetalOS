@@ -1,15 +1,18 @@
-#include "bcm2711_peripheral.h"
 #include "perpheral/gic-400.h"
 
 #include "memory.h"
 
-void GIC400_Initialize(){
+GIC400* GIC400_Initialize(){
+    GIC400* gic400 = (GIC400*)BCM2711_GIC_BASE;
+
     // Set the filter of priority mask to the lowest priority to enable all interrupts
     REG_32(GIC400_CPU_PMR) = 0xFF;
 
     // Enable the distributor and the CPU interfaces
     REG_32(GIC400_DIST_CTLR) = 0x01;
     REG_32(GIC400_CPU_CTLR) = 0x01;
+
+    return gic400;
 }
 
 void GIC400_EnableInterrupt(int irq_num){

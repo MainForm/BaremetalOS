@@ -2,7 +2,6 @@
 
 #include "memory.h"
 
-#include "bcm2711_peripheral.h"
 #include "perpheral/uart.h"
 #include "perpheral/interrupt.h"
 
