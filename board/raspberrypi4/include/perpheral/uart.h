@@ -214,7 +214,7 @@ typedef volatile struct __PL011{
 } PL011;
 
 PL011* PL011_Initialize(uint32_t baudrate);
-void PL011_EnableInterrupt(PL011* pl011, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback);
+void PL011_EnableInterrupt(PL011* pl011,GIC400* gic400, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback);
 
 void PL011_SendWord(PL011* pl011,uint8_t data);
 void PL011_SendString(PL011* pl011, const char * str);

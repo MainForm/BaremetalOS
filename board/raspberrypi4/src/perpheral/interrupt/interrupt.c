@@ -8,12 +8,6 @@
 static IRQ_Handler_Callback IRQ_Handler_Callbacks[64];
 static void* IRQ_Handler_data[64];
 
-void IRQ_Initialize(){
-    GIC400_Initialize();
-
-    IRQ_Enable();
-}
-
 void IRQ_Enable(){
     __asm__ volatile(
         "MSR DAIFClr, #2    \n"
@@ -21,10 +15,10 @@ void IRQ_Enable(){
     );
 }
 
-bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback,void * data){
+bool IRQ_AttachInterrupt(GIC400* gic400, int irq_num, IRQ_Handler_Callback callback,void * data){
 
     if(IRQ_IsEnableInterrupt(irq_num) == false){
-        GIC400_EnableInterrupt(IRQ_VC_IRQ_BASE + irq_num);
+        GIC400_EnableInterrupt(gic400, IRQ_VC_IRQ_BASE + irq_num);
     }
 
     IRQ_Handler_Callbacks[irq_num] = callback;

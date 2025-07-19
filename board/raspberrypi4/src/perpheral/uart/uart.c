@@ -48,12 +48,12 @@ PL011* PL011_Initialize(uint32_t baudrate){
     return pl011;
 }
 
-void PL011_EnableInterrupt(PL011* pl011, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback){
+void PL011_EnableInterrupt(PL011* pl011,GIC400* gic400, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback){
     // Mask the specific bit to enable the interrupt
     pl011->IMSC.value |= uartIRQ;
 
     if(IRQ_IsEnableInterrupt(IRQ_UART_NUM) == false){
-        IRQ_AttachInterrupt(IRQ_UART_NUM,PL011_HandlingIRQ,(void*)pl011);
+        IRQ_AttachInterrupt(gic400, IRQ_UART_NUM,PL011_HandlingIRQ,(void*)pl011);
     }
 
     for(uint32_t idx = 0; idx < UART_IRQ_COUNT;++idx, uartIRQ >>= 1){

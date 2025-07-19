@@ -5,27 +5,6 @@
 
 #define BCM2711_GIC_BASE                (0xFF840000)
 
-#define GIC400_DIST_BASE                (BCM2711_GIC_BASE + 0x1000)
-
-#define GIC400_DIST_CTLR                ((volatile void *)(GIC400_DIST_BASE))
-#define GIC400_DIST_TYPER               ((volatile void *)(GIC400_DIST_BASE + 0x004))
-#define GIC400_DIST_IIDR                ((volatile void *)(GIC400_DIST_BASE + 0x008))
-#define GIC400_DIST_ISENABLER0          ((volatile void *)(GIC400_DIST_BASE + 0x100))
-#define GIC400_DIST_ISENABLER1          ((volatile void *)(GIC400_DIST_BASE + 0x104))
-#define GIC400_DIST_ISPENDR0            ((volatile void *)(GIC400_DIST_BASE + 0x200))
-#define GIC400_DIST_IPRIORITYR0         ((volatile void *)(GIC400_DIST_BASE + 0x400))
-#define GIC400_DIST_ITARGETSR0          ((volatile void *)(GIC400_DIST_BASE + 0x800))
-
-#define GIC400_CPU_BASE                 (BCM2711_GIC_BASE + 0x2000)
-
-#define GIC400_CPU_CTLR                 ((volatile void *)(GIC400_CPU_BASE))
-#define GIC400_CPU_PMR                  ((volatile void *)(GIC400_CPU_BASE + 0x0004))
-#define GIC400_CPU_IAR                  ((volatile void *)(GIC400_CPU_BASE + 0x000C))
-#define GIC400_CPU_EOIR                 ((volatile void *)(GIC400_CPU_BASE + 0x0010))
-
-#define GIC400_IRQ_ACK                  (0x3FF)
-#define GIC400_EOIINTID                 (0x3FF)
-
 // GIC-400 Distribute Distributor Structures
 
 typedef union __GIC400_GICD_CTRL_REG{
@@ -33,6 +12,7 @@ typedef union __GIC400_GICD_CTRL_REG{
 
     struct {
         uint32_t Enable     : 1;
+		uint32_t 			: 31;
     };
 } GIC400_GICD_CTRL_REG;
 
@@ -161,7 +141,8 @@ typedef union __GIC400_GICC_CTLR_REG{
     uint32_t value;
 
 	struct {
-		uint32_t Enable : 1;
+		uint32_t Enable 	: 1;
+		uint32_t 			: 31;
 	};
 
 } GIC400_GICC_CTLR_REG;
@@ -170,10 +151,40 @@ typedef union __GIC400_GICC_PMR_REG{
     uint32_t value;
 
 	struct {
-		uint32_t Priority	: 8;
+		uint32_t Priority	:  8;
+		uint32_t 			: 24;
 	};
 
 } GIC400_GICC_PMR_REG;
+
+typedef union __GIC400_GICC_BPR_REG{
+    uint32_t value;
+
+	struct {
+		uint32_t BinaryPoint	: 3;
+	};
+
+} GIC400_GICC_BPR_REG;
+
+typedef union __GIC400_GICC_IAR_REG{
+    uint32_t value;
+
+	struct {
+		uint32_t InterruptID	: 10;
+		uint32_t CPUID			:  3;
+	};
+
+} GIC400_GICC_IAR_REG;
+
+typedef union __GIC400_GICC_EOIR_REG{
+    uint32_t value;
+
+	struct {
+		uint32_t EOINTID		: 10;
+		uint32_t CPUID			:  3;
+	};
+
+} GIC400_GICC_EOIR_REG;
 
 typedef union __GIC400_GICC_IIDR_REG{
     uint32_t value;
@@ -191,10 +202,12 @@ typedef union __GIC400_GICC_IIDR_REG{
 
 typedef struct __GIC400_CPU{
 	GIC400_GICC_CTLR_REG	GICC_CTRL; 			// 0x0000
-
 	GIC400_GICC_PMR_REG 	GICC_PMR;			// 0x0004
+	GIC400_GICC_BPR_REG		GICC_BPR;			// 0x0008
+	GIC400_GICC_IAR_REG		GICC_IAR;			// 0x000C
+	GIC400_GICC_EOIR_REG	GICC_EOIR;			// 0x0010
 
-	uint32_t __pading0[(0x00FC - 0x0008) / 4];	// 0x0008 ~ 0x00F8
+	uint32_t __pading0[(0x00FC - 0x0014) / 4];	// 0x0014 ~ 0x00F8
 
 	GIC400_GICC_IIDR_REG	GICC_IIDR;			// 0x00FC
 
@@ -218,11 +231,12 @@ typedef volatile struct __GIC400{
 
 
 GIC400* GIC400_Initialize();
-void GIC400_EnableInterrupt(int irq_num);
-uint32_t GIC400_GetPendingBits(int reg_num);
-uint32_t GIC400_GetDistID();
+void GIC400_EnableInterrupt(GIC400* gic400,int irq_num);
+uint32_t GIC400_GetPendingBits(GIC400* gic400,int reg_num);
+GIC400_GICD_IIDR_REG GIC400_GetDistID(GIC400* gic400);
+GIC400_GICC_IIDR_REG GIC400_GetCPUID(GIC400* gic400);
 
-uint32_t GIC400_GetAcknowledge(void);
-void GIC400_EndIRQ(uint32_t irqID);
+GIC400_GICC_IAR_REG GIC400_GetAcknowledge(GIC400* gic400);
+void GIC400_EndIRQ(GIC400* gic400,uint32_t irqID);
 
 #endif

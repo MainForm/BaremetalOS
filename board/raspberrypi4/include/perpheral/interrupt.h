@@ -11,10 +11,9 @@
 
 typedef void (*IRQ_Handler_Callback)(void *);
 
-void IRQ_Initialize();
 void IRQ_Enable();
 bool IRQ_IsEnableInterrupt(int irq_num);
-bool IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback,void* data);
+bool IRQ_AttachInterrupt(GIC400* gic400,int irq_num, IRQ_Handler_Callback callback,void* data);
 void IRQ_CallHandlerCallback(int irq_num);
 
 #endif
