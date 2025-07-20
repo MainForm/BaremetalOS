@@ -20,11 +20,12 @@ typedef union __GIC400_GICD_TYPER_REG{
     uint32_t value;
 
     struct {
-        uint32_t ITLinesNumber  : 5;
-        uint32_t CPUNumber      : 3;
-		uint32_t      			: 2;
-		uint32_t SecurityExtn	: 1;
-		uint32_t LSPI			: 4;
+        uint32_t ITLinesNumber  :  5;
+        uint32_t CPUNumber      :  3;
+		uint32_t      			:  2;
+		uint32_t SecurityExtn	:  1;
+		uint32_t LSPI			:  4;
+		uint32_t				: 16;
     };
 } GIC400_GICD_TYPER_REG;
 
@@ -161,7 +162,8 @@ typedef union __GIC400_GICC_BPR_REG{
     uint32_t value;
 
 	struct {
-		uint32_t BinaryPoint	: 3;
+		uint32_t BinaryPoint	:  3;
+		uint32_t 				: 29;
 	};
 
 } GIC400_GICC_BPR_REG;
@@ -172,6 +174,7 @@ typedef union __GIC400_GICC_IAR_REG{
 	struct {
 		uint32_t InterruptID	: 10;
 		uint32_t CPUID			:  3;
+		uint32_t 				: 19;
 	};
 
 } GIC400_GICC_IAR_REG;
@@ -182,6 +185,7 @@ typedef union __GIC400_GICC_EOIR_REG{
 	struct {
 		uint32_t EOINTID		: 10;
 		uint32_t CPUID			:  3;
+		uint32_t 				: 19;
 	};
 
 } GIC400_GICC_EOIR_REG;

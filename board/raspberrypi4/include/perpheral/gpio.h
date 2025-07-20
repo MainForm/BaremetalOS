@@ -21,16 +21,17 @@ typedef union __GPFSEL0_REG{
     uint32_t value;
 
     struct {
-        uint32_t FSEL0 : 3;
-        uint32_t FSEL1 : 3;
-        uint32_t FSEL2 : 3;
-        uint32_t FSEL3 : 3;
-        uint32_t FSEL4 : 3;
-        uint32_t FSEL5 : 3;
-        uint32_t FSEL6 : 3;
-        uint32_t FSEL7 : 3;
-        uint32_t FSEL8 : 3;
-        uint32_t FSEL9 : 3;
+        uint32_t FSEL0  : 3;
+        uint32_t FSEL1  : 3;
+        uint32_t FSEL2  : 3;
+        uint32_t FSEL3  : 3;
+        uint32_t FSEL4  : 3;
+        uint32_t FSEL5  : 3;
+        uint32_t FSEL6  : 3;
+        uint32_t FSEL7  : 3;
+        uint32_t FSEL8  : 3;
+        uint32_t FSEL9  : 3;
+        uint32_t        : 2;
     };
 } GPFSEL0_REG;
 
@@ -38,16 +39,17 @@ typedef union __GPFSEL1_REG{
     uint32_t value;
 
     struct {
-        uint32_t FSEL10 : 3;
-        uint32_t FSEL11 : 3;
-        uint32_t FSEL12 : 3;
-        uint32_t FSEL13 : 3;
-        uint32_t FSEL14 : 3;
-        uint32_t FSEL15 : 3;
-        uint32_t FSEL16 : 3;
-        uint32_t FSEL17 : 3;
-        uint32_t FSEL18 : 3;
-        uint32_t FSEL19 : 3;
+        uint32_t FSEL10     : 3;
+        uint32_t FSEL11     : 3;
+        uint32_t FSEL12     : 3;
+        uint32_t FSEL13     : 3;
+        uint32_t FSEL14     : 3;
+        uint32_t FSEL15     : 3;
+        uint32_t FSEL16     : 3;
+        uint32_t FSEL17     : 3;
+        uint32_t FSEL18     : 3;
+        uint32_t FSEL19     : 3;
+        uint32_t            : 2;
     };
 } GPFSEL1_REG;
 
@@ -65,6 +67,7 @@ typedef union __GPFSEL2_REG{
         uint32_t FSEL27 : 3;
         uint32_t FSEL28 : 3;
         uint32_t FSEL29 : 3;
+        uint32_t        : 2;
     };
 } GPFSEL2_REG;
 
@@ -82,6 +85,7 @@ typedef union __GPFSEL3_REG{
         uint32_t FSEL37 : 3;
         uint32_t FSEL38 : 3;
         uint32_t FSEL39 : 3;
+        uint32_t        : 2;
     };
 } GPFSEL3_REG;
 
@@ -99,6 +103,7 @@ typedef union __GPFSEL4_REG{
         uint32_t FSEL47 : 3;
         uint32_t FSEL48 : 3;
         uint32_t FSEL49 : 3;
+        uint32_t        : 2;
     };
 } GPFSEL4_REG;
 
@@ -114,6 +119,7 @@ typedef union __GPFSEL5_REG{
         uint32_t FSEL55 : 3;
         uint32_t FSEL56 : 3;
         uint32_t FSEL57 : 3;
+        uint32_t        : 8;
     };
 } GPFSEL5_REG;
 
