@@ -1,4 +1,4 @@
-#include "perpheral/gpio.h"
+#include "BCM2711_GPIO.h"
 
 BCM2711_GPIO* BCM2711_GPIO_Initialize(){
     return (BCM2711_GPIO*)BCM2711_GPIO_BASE;

@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
-#include "perpheral/gpio.h"
-#include "perpheral/uart.h"
-#include "perpheral/gic-400.h"
-#include "perpheral/interrupt.h"
+#include "BCM2711_GPIO.h"
+#include "PL011.h"
+#include "GIC-400.h"
+#include "interrupt.h"
 
 #define LED_PIN				(21)
 #define UART0_TX			(14)

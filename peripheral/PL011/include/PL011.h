@@ -4,8 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "perpheral/gpio.h"
-#include "perpheral/interrupt.h"
+#include "BCM2711_GPIO.h"
+#include "interrupt.h"
 
 #define BCM2711_UART0_BASE      (0xFE201000)
 

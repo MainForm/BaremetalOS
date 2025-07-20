@@ -1,4 +1,4 @@
-#include "perpheral/gic-400.h"
+#include "GIC-400.h"
 
 GIC400* GIC400_Initialize(){
     GIC400* gic400 = (GIC400*)BCM2711_GIC_BASE;

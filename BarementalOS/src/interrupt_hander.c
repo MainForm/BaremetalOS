@@ -1,6 +1,6 @@
 #include <stdint.h>
-#include "perpheral/gic-400.h"
-#include "perpheral/interrupt.h"
+#include "GIC-400.h"
+#include "interrupt.h"
 
 void IRQ_Handler(){
     GIC400* gic400 = (GIC400 *)BCM2711_GIC_BASE;

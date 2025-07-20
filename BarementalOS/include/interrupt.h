@@ -2,7 +2,7 @@
 #define __BCM2711_INTERRUPT_H__
 
 #include <stdbool.h>
-#include "perpheral/gic-400.h"
+#include "gic-400.h"
 
 // This is based on “6.3. GIC-400 interrupt controller” in the bcm2711-peripherals Manual.
 // You can check the base number of the VideoCore peripheral IRQs.

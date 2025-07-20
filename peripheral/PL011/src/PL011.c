@@ -2,8 +2,8 @@
 
 #include "memory.h"
 
-#include "perpheral/uart.h"
-#include "perpheral/interrupt.h"
+#include "PL011.h"
+#include "interrupt.h"
 
 IRQ_Handler_Callback uartIRQ_Callbacks[UART_IRQ_COUNT];
 

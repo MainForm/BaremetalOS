@@ -90,3 +90,4 @@ vector_table:
     .align 7
     BL   halt
     .align 7
+    

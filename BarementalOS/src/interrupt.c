@@ -1,7 +1,7 @@
-#include "perpheral/interrupt.h"
-#include "perpheral/gic-400.h"
+#include "interrupt.h"
+#include "GIC-400.h"
 
-#include "perpheral/uart.h"
+#include "PL011.h"
 
 #include <stddef.h>
 
