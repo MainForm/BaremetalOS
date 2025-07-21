@@ -5,9 +5,6 @@
 #include "HAL_GIC.h"
 #include "interrupt.h"
 
-#include "BCM2711_peripheral.h"
-#include "GIC-400.h"
-
 #define UART0               (0)
 
 #define IRQ_UART            (96 + 57)

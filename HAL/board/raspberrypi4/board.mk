@@ -1,6 +1,3 @@
-
-PERIPHERAL_PATH = $(shell pwd)/peripheral
-
 # BCM2711_GPIO 	: gpio peripheral
 # PL011 		: UART peripheral
 # GIC-400		: interrupt peripheral
