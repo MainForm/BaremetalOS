@@ -1,32 +1,17 @@
 #include <stddef.h>
 
-#include "memory.h"
-
 #include "PL011.h"
-#include "interrupt.h"
 
-IRQ_Handler_Callback uartIRQ_Callbacks[UART_IRQ_COUNT];
-
-static void PL011_HandlingIRQ(void* interrupted_pl011){
-    PL011* pl011 = (PL011*)interrupted_pl011;
-    uint32_t uartIRQ_status = pl011->MIS.value; // REG_32(BCM2711_UART0_MIS);
-
-    for(uint32_t idx = 0, mask = 1; idx < UART_IRQ_COUNT;++idx, mask <<= 1){
-        if(uartIRQ_status & mask){
-            if(uartIRQ_Callbacks[idx] != NULL){
-                uartIRQ_Callbacks[idx](interrupted_pl011);
-            }
-        }
-    }
+PL011* PL011_GetRegisters(uintptr_t BaseAddress){
+    return (PL011*)BaseAddress;
 }
 
-PL011* PL011_Initialize(uint32_t baudrate){
-    PL011* pl011 = (PL011 *)BCM2711_UART0_BASE;
+void PL011_Initialize(PL011* pl011,uint32_t UARTCLK, uint32_t baudrate){
     // disable the UART0
     pl011->CR.value = 0x00;
 
     // Get the BaudRateDivider
-    double BRD = (UART0_CLK)/(16.0 * baudrate);
+    double BRD = (UARTCLK)/(16.0 * baudrate);
     
     pl011->IBRD.value = (uint32_t)BRD;
 
@@ -44,24 +29,11 @@ PL011* PL011_Initialize(uint32_t baudrate){
     pl011->CR.TXE = 1;
     pl011->CR.RXE = 1;
     pl011->CR.UARTEN = 1;
-
-    return pl011;
 }
 
-void PL011_EnableInterrupt(PL011* pl011,GIC400* gic400, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback){
+void PL011_EnableInterrupt(PL011* pl011, PL011_IMSC uartIRQ){
     // Mask the specific bit to enable the interrupt
     pl011->IMSC.value |= uartIRQ;
-
-    if(IRQ_IsEnableInterrupt(IRQ_UART_NUM) == false){
-        IRQ_AttachInterrupt(gic400, IRQ_UART_NUM,PL011_HandlingIRQ,(void*)pl011);
-    }
-
-    for(uint32_t idx = 0; idx < UART_IRQ_COUNT;++idx, uartIRQ >>= 1){
-        if(uartIRQ & 0x01){
-            uartIRQ_Callbacks[idx] = callback;
-            break;
-        }
-    }
 }
 
 void PL011_SendWord(PL011* pl011,uint8_t data){

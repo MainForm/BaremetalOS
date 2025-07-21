@@ -1,12 +1,9 @@
 #include "interrupt.h"
-#include "GIC-400.h"
-
-#include "PL011.h"
+#include "HAL_GIC.h"
 
 #include <stddef.h>
 
-static IRQ_Handler_Callback IRQ_Handler_Callbacks[64];
-static void* IRQ_Handler_data[64];
+static IRQ_Handler_Callback IRQ_Handler_Callbacks[IRQ_MAXIMUM_COUNT];
 
 void IRQ_Enable(){
     __asm__ volatile(
@@ -15,15 +12,13 @@ void IRQ_Enable(){
     );
 }
 
-bool IRQ_AttachInterrupt(GIC400* gic400, int irq_num, IRQ_Handler_Callback callback,void * data){
+void IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback){
 
     if(IRQ_IsEnableInterrupt(irq_num) == false){
-        GIC400_EnableInterrupt(gic400, IRQ_VC_IRQ_BASE + irq_num);
+       HAL_GIC_EnableInterrupt(irq_num);
     }
 
     IRQ_Handler_Callbacks[irq_num] = callback;
-    IRQ_Handler_data[irq_num] = data;
-    return true;
 }
 
 bool IRQ_IsEnableInterrupt(int irq_num){
@@ -35,5 +30,5 @@ void IRQ_CallHandlerCallback(int irq_num){
         return;
     }
 
-    IRQ_Handler_Callbacks[irq_num](IRQ_Handler_data[irq_num]);
+    IRQ_Handler_Callbacks[irq_num]();
 }

@@ -4,8 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define BCM2711_GPIO_BASE                   (0xFE200000)
-
 typedef enum __FSEL_FUNC{
     FSEL_FUNC_INPUT =    0b000,
     FSEL_FUNC_OUTPUT =   0b001,
@@ -171,7 +169,7 @@ typedef volatile struct __BCM2711_GPIO{
 
 } BCM2711_GPIO;
 
-BCM2711_GPIO* BCM2711_GPIO_Initialize();
+BCM2711_GPIO* BCM2711_GPIO_GetRegisters(uintptr_t BaseAddress);
 void BCM2711_GPIO_SelectFunction(BCM2711_GPIO* gpio,uint32_t pin,FSEL_FUNC function);
 void BCM2711_GPIO_SetOutput(BCM2711_GPIO* gpio,uint32_t pin,bool value);
 

@@ -3,10 +3,7 @@
 
 #include <stdint.h>
 
-#define BCM2711_GIC_BASE                (0xFF840000)
-
 // GIC-400 Distribute Distributor Structures
-
 typedef union __GIC400_GICD_CTRL_REG{
     uint32_t value;
 
@@ -233,10 +230,10 @@ typedef volatile struct __GIC400{
 	// We implemented the minimum register setup required to operate interrupts.
 } GIC400;
 
-
-GIC400* GIC400_Initialize();
-void GIC400_EnableInterrupt(GIC400* gic400,int irq_num);
-uint32_t GIC400_GetPendingBits(GIC400* gic400,int reg_num);
+GIC400* GIC400_GetRegisters(uintptr_t BaseAddress);
+void GIC400_Initialize(GIC400* gic400);
+void GIC400_EnableInterrupt(GIC400* gic400,uint32_t irq_num);
+uint32_t GIC400_GetPendingBits(GIC400* gic400,uint32_t reg_num);
 GIC400_GICD_IIDR_REG GIC400_GetDistID(GIC400* gic400);
 GIC400_GICC_IIDR_REG GIC400_GetCPUID(GIC400* gic400);
 

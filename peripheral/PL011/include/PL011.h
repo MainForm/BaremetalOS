@@ -4,16 +4,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#include "BCM2711_GPIO.h"
-#include "interrupt.h"
-
-#define BCM2711_UART0_BASE      (0xFE201000)
-
-// Default UART0 clock
-#define UART0_CLK               (48000000)
-
-#define UART_IRQ_COUNT          (11)
-
 typedef union __PL011_DR_REG{
     uint32_t value;
 
@@ -83,7 +73,7 @@ typedef union __PL011_CR_REG{
         uint32_t UARTEN 	:  1;	// 0 bit
 		uint32_t SIREN 		:  1;	// 1 bit
 		uint32_t SIRLP 		:  1;	// 2 bit
-		uint32_t 			:  3;	// 3 ~ 6 bits : reservd
+		uint32_t 			:  4;	// 3 ~ 6 bits : reservd
 		uint32_t LBE 		:  1;	// 7 bit
 		uint32_t TXE 		:  1;	// 8 bit
 		uint32_t RXE 		:  1;	// 9 bit
@@ -131,7 +121,7 @@ typedef union __PL011_IMSC_REG{
 		uint32_t CTSMIM 	:  1;	// 1 bit
 		uint32_t DCDMIM 	:  1;	// 2 bit
 		uint32_t DSRMIM 	:  1;	// 3 bit
-		uint32_t RXIM		:  3;	// 4 bit
+		uint32_t RXIM		:  1;	// 4 bit
 		uint32_t TXIM 		:  1;	// 5 bit
 		uint32_t RTIM 		:  1;	// 6 bit
 		uint32_t FEIM 		:  1;	// 7 bit
@@ -156,7 +146,7 @@ typedef union __PL011_MIS_REG{
 		uint32_t CTSMMIS 	:  1;	// 1 bit
 		uint32_t DCDMMIS 	:  1;	// 2 bit
 		uint32_t DSRMMIS 	:  1;	// 3 bit
-		uint32_t RXMIS		:  3;	// 4 bit
+		uint32_t RXMIS		:  1;	// 4 bit
 		uint32_t TXMIS 		:  1;	// 5 bit
 		uint32_t RTMIS 		:  1;	// 6 bit
 		uint32_t FEMIS 		:  1;	// 7 bit
@@ -175,7 +165,7 @@ typedef union __PL011_ICR_REG{
 		uint32_t CTSMIC 	:  1;	// 1 bit
 		uint32_t DCDMIC 	:  1;	// 2 bit
 		uint32_t DSRMIC 	:  1;	// 3 bit
-		uint32_t RXIC		:  3;	// 4 bit
+		uint32_t RXIC		:  1;	// 4 bit
 		uint32_t TXIC 		:  1;	// 5 bit
 		uint32_t RTIC 		:  1;	// 6 bit
 		uint32_t FEIC 		:  1;	// 7 bit
@@ -221,8 +211,9 @@ typedef volatile struct __PL011{
 	PL011_ICR_REG 	ICR;			// Offset : 0x44
 } PL011;
 
-PL011* PL011_Initialize(uint32_t baudrate);
-void PL011_EnableInterrupt(PL011* pl011,GIC400* gic400, PL011_IMSC uartIRQ, IRQ_Handler_Callback callback);
+PL011* PL011_GetRegisters(uintptr_t BaseAddress);
+void PL011_Initialize(PL011* pl011,uint32_t UARTCLK, uint32_t baudrate);
+void PL011_EnableInterrupt(PL011* pl011, PL011_IMSC uartIRQ);
 
 void PL011_SendWord(PL011* pl011,uint8_t data);
 void PL011_SendString(PL011* pl011, const char * str);

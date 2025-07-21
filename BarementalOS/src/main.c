@@ -1,9 +1,16 @@
 #include <stdlib.h>
 
-#include "BCM2711_GPIO.h"
-#include "PL011.h"
-#include "GIC-400.h"
+#include "HAL_GPIO.h"
+#include "HAL_UART.h"
+#include "HAL_GIC.h"
 #include "interrupt.h"
+
+#include "BCM2711_peripheral.h"
+#include "GIC-400.h"
+
+#define UART0               (0)
+
+#define IRQ_UART            (96 + 57)
 
 #define LED_PIN				(21)
 #define UART0_TX			(14)
@@ -13,31 +20,31 @@ void delay(volatile uint32_t i){
     while(i-- > 0);
 }
 
+void UART_IRQ_Rx_Handler(){
+    uint8_t data = HAL_UART_ReceiveWord(UART0);
+
+    HAL_UART_SendWord(UART0,data);
+}
+
 int main(){
-    BCM2711_GPIO* gpio = BCM2711_GPIO_Initialize();
-    PL011* uart0 = PL011_Initialize(115200);
-    GIC400* gic400 = GIC400_Initialize();
+    HAL_GIC_Initialize();
+    IRQ_Enable();
 
-    char buf[10];
+    HAL_GIC_EnableInterrupt(IRQ_UART);
 
-    BCM2711_GPIO_SelectFunction(gpio,LED_PIN,FSEL_FUNC_OUTPUT);
-    BCM2711_GPIO_SelectFunction(gpio,UART0_TX,FSEL_FUNC_ALT0);
-    BCM2711_GPIO_SelectFunction(gpio,UART0_RX,FSEL_FUNC_ALT0);
+    HAL_UART_Initialize(UART0,115200);
+    HAL_UART_EnableInterrupt(UART0,UART_IRQ_RX);
+    
+    HAL_GPIO_SetFunction(UART0_TX,GPIO_FUNC_ALT0);
+    HAL_GPIO_SetFunction(UART0_RX,GPIO_FUNC_ALT0);
 
-    while(1){
-        BCM2711_GPIO_SetOutput(gpio,LED_PIN,true);
-        itoa(gic400->Distributor.GICD_IIDR.value,buf,16);
-        PL011_SendString(uart0, "GICD_IIDR : ");
-        PL011_SendString(uart0, buf);
-        PL011_SendWord(uart0, '\n');
+    HAL_GPIO_SetFunction(LED_PIN,GPIO_FUNC_OUTPUT);
 
-        itoa(gic400->CPU.GICC_IIDR.value,buf,16);
-        PL011_SendString(uart0, "GICC_IIDR : ");
-        PL011_SendString(uart0, buf);
-        PL011_SendWord(uart0, '\n');
+    IRQ_AttachInterrupt(IRQ_UART,UART_IRQ_Rx_Handler);
 
-        delay(0x200000);
-    }
+    HAL_GPIO_SetOutput(LED_PIN,HIGH);
+    
+    while(1){}
 
     return 0;
 }

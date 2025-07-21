@@ -2,18 +2,18 @@
 #define __BCM2711_INTERRUPT_H__
 
 #include <stdbool.h>
-#include "gic-400.h"
 
-// This is based on “6.3. GIC-400 interrupt controller” in the bcm2711-peripherals Manual.
-// You can check the base number of the VideoCore peripheral IRQs.
-#define IRQ_VC_IRQ_BASE     (96)
-#define IRQ_UART_NUM        (57)
+// The maximum number of IRQs should be a multiple of 32.
+// The number of IRQs supported by the GIC-400 must be a multiple of 32.
+// The BCM2711 supports 216 IRQs.
+// So, I decided to set the maximum number of IRQs to 256 because 256 is a multiple of 32 and larger than 216.
+#define IRQ_MAXIMUM_COUNT       (32 * 8)    // 256
 
-typedef void (*IRQ_Handler_Callback)(void *);
+typedef void (*IRQ_Handler_Callback)();
 
 void IRQ_Enable();
 bool IRQ_IsEnableInterrupt(int irq_num);
-bool IRQ_AttachInterrupt(GIC400* gic400,int irq_num, IRQ_Handler_Callback callback,void* data);
+void IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback);
 void IRQ_CallHandlerCallback(int irq_num);
 
 #endif

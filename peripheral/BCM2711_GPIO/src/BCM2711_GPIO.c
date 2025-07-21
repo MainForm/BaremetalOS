@@ -1,7 +1,7 @@
 #include "BCM2711_GPIO.h"
 
-BCM2711_GPIO* BCM2711_GPIO_Initialize(){
-    return (BCM2711_GPIO*)BCM2711_GPIO_BASE;
+BCM2711_GPIO* BCM2711_GPIO_GetRegisters(uintptr_t BaseAddress){
+    return (BCM2711_GPIO*)BaseAddress;
 }
 
 void BCM2711_GPIO_SelectFunction(BCM2711_GPIO* gpio,uint32_t pin,FSEL_FUNC function){

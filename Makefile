@@ -23,10 +23,11 @@ OS_PATH = $(PROJECT_PATH)/BarementalOS
 OS_SRC_DIR = $(OS_PATH)/src
 OS_INCLUDE_DIR = $(OS_PATH)/include
 
-BOARD_PATH = $(PROJECT_PATH)/board/$(TARGET_BOARD)
+HAL_PATH = $(PROJECT_PATH)/HAL
+BOARD_PATH = $(HAL_PATH)/board/$(TARGET_BOARD)
 BOARD_FIRMWARE_DIR = $(BOARD_PATH)/firmware
 include $(BOARD_PATH)/board.mk
-#BOARD_SRC_DIR = $(BOARD_PATH)/src
+BOARD_SRC_PATH = $(BOARD_PATH)/src
 
 INCLUDE_DIRS = $(shell find . -type d -path '*/include')
 INCLUD_FLAG = $(foreach inc_dir,$(INCLUDE_DIRS),-I$(inc_dir))
@@ -40,12 +41,12 @@ OS_C_SRCS = $(shell find $(OS_SRC_DIR) -name '*.c')
 OS_C_OBJS = $(OS_C_SRCS:$(OS_SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
 PERIPHERAL_C_SRCS = $(foreach peripheral,$(PERIPHERAL_NAMES),$(shell find $(PERIPHERAL_PATH) -path '*/$(peripheral)/*' -name '*.c'))
-PERIPHERAL_C_OBJS = $(PERIPHERAL_C_SRCS:$(shell pwd)/%.c=$(BUILD_DIR)/%.o) 
+PERIPHERAL_C_OBJS = $(PERIPHERAL_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
 
-# BOARD_C_SRCS = $(shell find $(BOARD_SRC_DIR) -name '*.c')
-# BOARD_C_OBJS = $(BOARD_C_SRCS:$(BOARD_SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
+BOARD_C_SRCS = $(shell find $(BOARD_SRC_PATH) -name '*.c')
+BOARD_C_OBJS = $(BOARD_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
 
-LD_SCRIPT = linker.ld
+LD_SCRIPT = $(BOARD_PATH)/linker.ld
 
 TARGET = image
 ELF_FILE = kernel.elf
@@ -59,7 +60,7 @@ $(TARGET): $(ELF_FILE)
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$< $(BUILD_DIR)/output/$@
 	cp $(BOARD_FIRMWARE_DIR)/* $(BUILD_DIR)/output/
 
-$(ELF_FILE): $(OS_AS_OBJS) $(OS_C_OBJS) $(PERIPHERAL_C_OBJS)
+$(ELF_FILE): $(OS_AS_OBJS) $(OS_C_OBJS) $(PERIPHERAL_C_OBJS) $(BOARD_C_OBJS)
 	@mkdir -p $(BUILD_DIR)
 	$(LD) $(LDFLAG) -T $(LD_SCRIPT) -o $(BUILD_DIR)/$@ $^
 
@@ -75,8 +76,13 @@ $(PERIPHERAL_C_OBJS): $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) $(INCLUD_FLAG) -o $@ $<
 
+$(BOARD_C_OBJS): $(BUILD_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) $(INCLUD_FLAG) -o $@ $<
+
 test:
-	echo "$(PROJECT_PATH)"
+	echo "$(BOARD_C_OBJS)"
+	echo "$(BOARD_C_SRCS)"
 
 clean:
 	@rm -rf $(BUILD_DIR)
