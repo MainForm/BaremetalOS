@@ -41,7 +41,11 @@ int main(){
 
     HAL_GPIO_SetOutput(LED_PIN,HIGH);
     
-    while(1){}
+    while(1){
+        HAL_UART_SendString(UART0,"Hello Qemu\n");
+
+        delay(0x800000);
+    }
 
     return 0;
 }

@@ -21,6 +21,13 @@ CFLAG  				:= -c -g -Wall -O2
 # This options are for the bare metal environment
 LDFLAG 				:= -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -fno-stack-protector
 
+# This variable is for the qemu emulation
+# QEMU_MACHINE_NAME and QEMU_RAM_SIZE will be set in board.mk, which is located in TARGET_BOARD_PATH
+QEMU				:= qemu-system-aarch64
+QEMU_FLAG 			:= -nographic
+QEMU_MACHINE_NAME 	:= 
+QEMU_RAM_SIZE		:= 
+
 # ──────────────────────────────────────────
 # 2) Path & Directory
 # ──────────────────────────────────────────
@@ -89,7 +96,7 @@ ELF_FILE 			:= kernel.elf
 # ──────────────────────────────────────────
 # 6) Build rule
 # ──────────────────────────────────────────
-.PHONY: all clean
+.PHONY: all clean run_qemu
 
 all: $(TARGET)
 
@@ -122,3 +129,6 @@ $(OS_C_OBJS): $(BUILD_DIR)/%.o: %.c
 
 clean:
 	@rm -rf $(BUILD_DIR)
+
+qemu_run: $(TARGET)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/output/$(TARGET) $(QEMU_FLAG)
