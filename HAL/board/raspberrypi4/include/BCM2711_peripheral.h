@@ -3,9 +3,21 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include "SP804.h"
+
+// Default APB Clock of BCM2711 :       250MHz
+#define BCM2711_APB_CLOCK               (250000000)
+
+// ────────────────────────────────────────────
+// GPIO peripheral
+// ────────────────────────────────────────────
 
 // GPIO peripheral base address
 #define BCM2711_GPIO_BASE               (0xFE200000)
+
+// ────────────────────────────────────────────
+// UART peripheral
+// ────────────────────────────────────────────
 
 // UART peripheral base address
 // return the -1 when trying to access the invailed irq number
@@ -23,6 +35,10 @@
 
 #define UART_IRQ_COUNT                  (11)
 
+// ────────────────────────────────────────────
+// GIC interrupt peripheral
+// ────────────────────────────────────────────
+
 // GIC base address
 #define BCM2711_GIC_BASE                (0xFF840000)
 
@@ -30,5 +46,61 @@
 // You can check the base number of the VideoCore peripheral IRQs.
 #define IRQ_VC_IRQ_BASE     (96)
 #define IRQ_UART_NUM        (57)
+
+// ────────────────────────────────────────────
+// Timer peripheral
+// ────────────────────────────────────────────
+
+// Timer base address
+#define BCM2711_SP804_BASE              (0xFE00B000)
+#define BCM2711_SP804_TIMER0_BASE       (BCM2711_SP804_BASE + 0x400)
+
+typedef union __BCM2711_SP804_TimerControl_REG{
+    uint32_t value;
+
+    struct {
+        uint32_t                    :  1;
+        uint32_t TimerSize          :  1;
+        uint32_t TimerPre           :  2;
+        uint32_t                    :  1;
+        uint32_t IntEnable          :  1;
+        uint32_t                    :  1;
+        uint32_t TimerEn            :  1;
+        uint32_t DebugHalt          :  1;
+        uint32_t EnableFreeRunning  :  1;
+        uint32_t                    :  6;
+        uint32_t FreeDiv            :  8;
+        uint32_t                    :  8;
+    };
+} BCM2711_SP804_TimerControl_REG;
+
+typedef union __BCM2711_SP804_PREDIV_REG{
+    uint32_t value;
+
+    struct {
+        uint32_t PREDIV     : 10;
+    };
+} BCM2711_SP804_PREDIV_REG;
+
+typedef union __BCM2711_SP804_FREECNT_REG{
+    uint32_t value;
+} BCM2711_SP804_FREECNT_REG;
+
+typedef volatile struct __BCM2711_SP804_Timer{
+    SP804_TimerLoad_REG             TimerLoad;      // Offset : 0x0000
+    SP804_TimerValue_REG            TimerValue;     // Offset : 0x0004
+    // only for BCM2711 register
+    BCM2711_SP804_TimerControl_REG  TimerControl;   // Offset : 0x0008
+
+    SP804_TimerIntClr_REG           TimerIntClr;    // Offset : 0x000C
+    SP804_TimerRIS_REG              TimerRIS;       // Offset : 0x0010
+    SP804_TimerMIS_REG              TimerMIS;       // Offset : 0x0014
+    SP804_TimerBGLoad_REG           TimerBGLoad;    // Offset : 0x0018
+
+    // only for BCM2711 register
+    BCM2711_SP804_PREDIV_REG        PREDIV;         // Offset : 0x001C
+    BCM2711_SP804_FREECNT_REG       FREECNT;        // Offset : 0x0020
+
+} BCM2711_SP804_Timer;
 
 #endif
