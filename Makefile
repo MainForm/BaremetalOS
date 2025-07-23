@@ -15,18 +15,24 @@ AS 					:= $(TOOLCHAIN_PREFIX)-as
 CC 					:= $(TOOLCHAIN_PREFIX)-gcc
 LD 					:= $(TOOLCHAIN_PREFIX)-gcc
 OBJCOPY 			:= $(TOOLCHAIN_PREFIX)-objcopy
+GDB					:= $(TOOLCHAIN_PREFIX)-gdb
 
 ASFLAG 				:= -c -g
 CFLAG  				:= -c -g -Wall -O2
 # This options are for the bare metal environment
 LDFLAG 				:= -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -fno-stack-protector
 
+# this variable is for GDB
+GDB_REMOTE_PORT		:= 9874
+
 # This variable is for the qemu emulation
 # QEMU_MACHINE_NAME and QEMU_RAM_SIZE will be set in board.mk, which is located in TARGET_BOARD_PATH
 QEMU				:= qemu-system-aarch64
 QEMU_FLAG 			:= -nographic
+QEMU_DEBUG_FLAG		:= -S -gdb tcp::$(GDB_REMOTE_PORT),ipv4
 QEMU_MACHINE_NAME 	:= 
 QEMU_RAM_SIZE		:= 
+
 
 # ──────────────────────────────────────────
 # 2) Path & Directory
@@ -96,7 +102,7 @@ ELF_FILE 			:= kernel.elf
 # ──────────────────────────────────────────
 # 6) Build rule
 # ──────────────────────────────────────────
-.PHONY: all clean run_qemu
+.PHONY: all clean qemu_run qemu_debug gdb
 
 all: $(TARGET)
 
@@ -132,3 +138,13 @@ clean:
 
 qemu_run: $(TARGET)
 	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/output/$(TARGET) $(QEMU_FLAG)
+
+qemu_debug: $(TARGET)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/output/$(TARGET) $(QEMU_FLAG) $(QEMU_DEBUG_FLAG)
+
+gdb:
+	$(GDB) 	-ex "file $(BUILD_DIR)/$(ELF_FILE)" 				\
+			-ex "target remote localhost:$(GDB_REMOTE_PORT)"	\
+			-ex "layout regs"									\
+			-ex "break _start"									\
+			-ex "continue"
