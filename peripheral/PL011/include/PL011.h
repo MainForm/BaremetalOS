@@ -1,5 +1,5 @@
-#ifndef __BCM2711_UART_H__
-#define __BCM2711_UART_H__
+#ifndef __PL011_H__
+#define __PL011_H__
 
 #include <stdint.h>
 #include <stdbool.h>
