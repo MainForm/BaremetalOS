@@ -56,46 +56,48 @@ void UART_Timer0_handler(){
 }
 
 int main(){
-    char buf[10];
+    // char buf[10];
 
 
-    // Initializing GIC to enable IRQs
-    HAL_GIC_Initialize();
-    HAL_GIC_EnableInterrupt(IRQ_UART);
-    IRQ_Enable();
-    // Initializing UART
-    HAL_UART_Initialize(UART0,115200);
-    HAL_UART_EnableInterrupt(UART0,UART_IRQ_RX);
+    // // Initializing GIC to enable IRQs
+    // HAL_GIC_Initialize();
+    // HAL_GIC_EnableInterrupt(IRQ_UART);
+    // IRQ_Enable();
+    // // Initializing UART
+    // HAL_UART_Initialize(UART0,115200);
+    // HAL_UART_EnableInterrupt(UART0,UART_IRQ_RX);
 
-    // Initailizing Timer0
-    HAL_GPTimer_Initialize(TIMER0);
-    HAL_GPTimer_SetTimerSize(TIMER0, GPTIMER_SIZE_32BITS);
-    HAL_GPTimer_SetTimerPrescale(TIMER0, GPTIMER_PRESCALE_1);
-    HAL_GPTimer_EnableInterrupt(TIMER0, true);
-    HAL_GPTimer_SetTimerLoad(TIMER0,1000);
-    HAL_GPTimer_EnableTimer(TIMER0, true);
+    // // Initailizing Timer0
+    // HAL_GPTimer_Initialize(TIMER0);
+    // HAL_GPTimer_SetTimerSize(TIMER0, GPTIMER_SIZE_32BITS);
+    // HAL_GPTimer_SetTimerPrescale(TIMER0, GPTIMER_PRESCALE_1);
+    // HAL_GPTimer_EnableInterrupt(TIMER0, true);
+    // HAL_GPTimer_SetTimerLoad(TIMER0,1000);
+    // HAL_GPTimer_EnableTimer(TIMER0, true);
 
-    // Set the GPIO to use Rx, Tx for UART
-    HAL_GPIO_SetFunction(UART0_TX,GPIO_FUNC_ALT0);
-    HAL_GPIO_SetFunction(UART0_RX,GPIO_FUNC_ALT0);
+    // // Set the GPIO to use Rx, Tx for UART
+    // HAL_GPIO_SetFunction(UART0_TX,GPIO_FUNC_ALT0);
+    // HAL_GPIO_SetFunction(UART0_RX,GPIO_FUNC_ALT0);
 
-    // Set the LED pin to output
-    HAL_GPIO_SetFunction(LED_PIN,GPIO_FUNC_OUTPUT);
+    // // Set the LED pin to output
+    // HAL_GPIO_SetFunction(LED_PIN,GPIO_FUNC_OUTPUT);
 
-    IRQ_AttachInterrupt(IRQ_UART,UART_IRQ_Rx_Handler);
-    IRQ_AttachInterrupt(IRQ_TIMER0,UART_Timer0_handler);
+    // IRQ_AttachInterrupt(IRQ_UART,UART_IRQ_Rx_Handler);
+    // IRQ_AttachInterrupt(IRQ_TIMER0,UART_Timer0_handler);
 
-    HAL_GPIO_SetOutput(LED_PIN,HIGH);
+    // HAL_GPIO_SetOutput(LED_PIN,HIGH);
 
-    while(1){
-        uintptr_t address_sp = get_sp();
-        itoa(address_sp,buf,16);
-        HAL_UART_SendString(UART0,"sp in main func : ");
-        HAL_UART_SendString(UART0,buf);
-        HAL_UART_SendWord(UART0,'\n');
+    // while(1){
+    //     uintptr_t address_sp = get_sp();
+    //     itoa(address_sp,buf,16);
+    //     HAL_UART_SendString(UART0,"sp in main func : ");
+    //     HAL_UART_SendString(UART0,buf);
+    //     HAL_UART_SendWord(UART0,'\n');
 
-        delay(0x400000);
-    }
+    //     delay(0x400000);
+    // }
+
+    while(1){}
 
     return 0;
 }

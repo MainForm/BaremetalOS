@@ -51,7 +51,7 @@ LD 					:= $(TOOLCHAIN_PREFIX)-gcc
 OBJCOPY 			:= $(TOOLCHAIN_PREFIX)-objcopy
 GDB					:= $(TOOLCHAIN_PREFIX)-gdb
 
-ASFLAG 				:= -c -g
+ASFLAG 				:= -c -g $(BOARD_AS_FLAG)
 CFLAG  				:= -c -g -Wall -O2
 # This options are for the bare metal environment
 LDFLAG 				:= -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -fno-stack-protector
@@ -147,14 +147,13 @@ clean:
 	@rm -rf $(BUILD_DIR)
 
 qemu_run: $(TARGET)
-	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/output/$(TARGET) $(QEMU_FLAG)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/$(TARGET) $(QEMU_FLAG)
 
 qemu_debug: $(TARGET)
-	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/output/$(TARGET) $(QEMU_FLAG) $(QEMU_DEBUG_FLAG)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -kernel $(BUILD_DIR)/$(QEMU_KERNEL) $(QEMU_FLAG) $(QEMU_DEBUG_FLAG)
 
 gdb:
 	$(GDB) 	-ex "file $(BUILD_DIR)/$(ELF_FILE)" 				\
 			-ex "target remote localhost:$(GDB_REMOTE_PORT)"	\
 			-ex "layout regs"									\
-			-ex "break _start"									\
-			-ex "continue"
+			-ex "break _start"
