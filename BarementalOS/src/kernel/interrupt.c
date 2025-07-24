@@ -5,13 +5,6 @@
 
 static IRQ_Handler_Callback IRQ_Handler_Callbacks[IRQ_MAXIMUM_COUNT];
 
-void IRQ_Enable(){
-    __asm__ volatile(
-        "MSR DAIFClr, #2    \n"
-        "ISB                \n"
-    );
-}
-
 void IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback){
 
     if(IRQ_IsEnableInterrupt(irq_num) == false){

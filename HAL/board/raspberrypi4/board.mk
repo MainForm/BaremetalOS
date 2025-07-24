@@ -1,3 +1,10 @@
+# Architecture of target board
+KERNEL_ARCH			:= arm64
+ARCH 				:= armv8-a
+MCPU 				:= cortex-a72
+
+TOOLCHAIN_PREFIX	:= aarch64-none-elf
+
 # BCM2711_GPIO 	: gpio peripheral
 # PL011 		: UART peripheral
 # GIC-400		: interrupt peripheral
