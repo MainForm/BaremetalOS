@@ -48,7 +48,7 @@ void HAL_GPTimer_SetTimerMode(uint32_t timerNum, GPTIMER_MODE mode){
         return;
     }
 
-    BCM2711_SP804_Timer* timer = BCM2711_SP804_GetRegister();
+    // BCM2711_SP804_Timer* timer = BCM2711_SP804_GetRegister();
 
     // SP804_SetTimerMode((SP804_Timer *)timer,mode);
 }
