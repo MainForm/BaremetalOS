@@ -26,6 +26,10 @@ bool IRQ_IsEnableInterrupt(int irq_num){
 }
 
 void IRQ_CallHandlerCallback(int irq_num){
+    if(IRQ_MAXIMUM_COUNT <= irq_num){
+        return;
+    }
+
     if(IRQ_Handler_Callbacks[irq_num] == NULL){
         return;
     }
