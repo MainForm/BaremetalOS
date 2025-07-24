@@ -36,36 +36,59 @@ SECTIONS
         __bss_end__ = .;
     } > RAM
 
-        /* stack section */
+     /* stack section */
+    CORE_COUNT                  =  4;
+    EL1_KERNEL_STACK_SIZE       = 16K;   /* 커널 */
+    EL1_IRQ_STACK_SIZE          =  4K;   /* IRQ */
+    EL1_GUARD_SIZE              =  4K;   /* per-stack guard */
+    EL1_STRIDE                  = EL1_KERNEL_STACK_SIZE + EL1_IRQ_STACK_SIZE + (EL1_GUARD_SIZE * 2);
+
+    TASK_COUNT                  = 10;
+    EL0_USTACK_SIZE             = 32K;   /* 사용자 모드 */
+    EL0_GUARD_SIZE              =  4K;
+
+    PAGE_SIZE                   =  4K;
+
     .stack (NOLOAD) : {
         /* align to page boundary */
-        . = ALIGN(16);
+        . = ALIGN(PAGE_SIZE);
 
         /* 
-            Assign 16Kib per 1 CPU core.
+            Assign 28Kib(16Kib for kerenl, 4Kib for IRQ, 8Kib for Gard page) per 1 CPU core.
             The count of cores in BCM2711 is 4.
 
-            So, Assign 64Kib to EL1 stack memory
+            So, Assign 112Kib to EL1 stack memory
         */
-        __stack_EL1_bottom = .;
-        . = . + (16K * 4);
-        __stack_EL1_top = .;
+        __stack_EL1_bottom__ = .;
 
-        /* Guard page for EL1 */
-        . = . + (4K);
+        /*
+        EL1 stack structure
+        4Kb     for gard page
+        4Kb    for IRQ
+        4Kb     for gard page
+        16Kb     for kernel
+        */
+        . = . + (EL1_STRIDE * CORE_COUNT);
+
+        __stack_EL1_top__ = .;
+
+        /* Guard page for EL1 to prevent overflow */
+        . = . + PAGE_SIZE;
 
         /* 
-            Assign 32Kib per 1 processor.
-            The maximum processors is 10.
+            Assign 32Kib per 1 task.
+            The maximum tasks is 10.
 
             So, Assign 320Kib to EL0 stack memory
         */
-         __stack_EL0_bottom = .;
-        . = . + (32K * 10);
-        __stack_EL0_top = .;
+        . = ALIGN(PAGE_SIZE);
 
-        /* Guard page for EL0 */
-        . = . + (4K);
+         __stack_EL0_bottom__ = .;
+        . = . + (32K * TASK_COUNT);
+        __stack_EL0_top__ = .;
+
+        /* Guard page for EL0 to prevent overflow */
+        . = . + PAGE_SIZE;
 
     } > RAM
 
