@@ -15,7 +15,7 @@ TARGET_BOARD 		:= realview-pb-a8
 PROJECT_PATH 				:= .
 PERIPHERAL_PATH 			:= $(PROJECT_PATH)/peripheral
 HAL_PATH 					:= $(PROJECT_PATH)/HAL
-OS_PATH 					:= $(PROJECT_PATH)/BarementalOS
+OS_PATH 					:= $(PROJECT_PATH)/BaremetalOS
 TARGET_BOARD_PATH 			:= $(HAL_PATH)/board/$(TARGET_BOARD)
 
 include $(TARGET_BOARD_PATH)/board.mk
@@ -147,10 +147,10 @@ clean:
 	@rm -rf $(BUILD_DIR)
 
 qemu_run: $(TARGET)
-	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/$(TARGET) $(QEMU_FLAG)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/$(QEMU_KERNEL) $(QEMU_FLAG)
 
 qemu_debug: $(TARGET)
-	$(QEMU) -M $(QEMU_MACHINE_NAME) -kernel $(BUILD_DIR)/$(QEMU_KERNEL) $(QEMU_FLAG) $(QEMU_DEBUG_FLAG)
+	$(QEMU) -M $(QEMU_MACHINE_NAME) -m $(QEMU_RAM_SIZE) -kernel $(BUILD_DIR)/$(QEMU_KERNEL) $(QEMU_FLAG) $(QEMU_DEBUG_FLAG)
 
 gdb:
 	$(GDB) 	-ex "file $(BUILD_DIR)/$(ELF_FILE)" 				\
