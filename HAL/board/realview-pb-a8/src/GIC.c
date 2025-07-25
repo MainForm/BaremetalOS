@@ -17,11 +17,6 @@ void HAL_GIC_EnableInterrupt(uint32_t irq_num){
     PB_A8_GIC* gic = PB_A8_GIC_GetRegisters(REALVIEW_PB_A8_GIC_BASE(0));
 
     PB_A8_GIC_EnableInterrupt(gic, irq_num);
-
-    char test[10];
-    itoa(gic->Distributor.GICD_ISENABLER[1].value,test,16);
-    HAL_UART_SendString(0,test);
-    HAL_UART_SendWord(0,'\n');
 }
 
 uint32_t HAL_GIC_GetAcknowledge(){

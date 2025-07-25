@@ -27,4 +27,22 @@
     (uintptr_t)NULL ))))                           \
 )
 
+
+// Table 4-88 Timer implementation
+// return the -1 when trying to access the invailed timer number
+#define REALVIEW_PB_A8_GPTIMER_BASE(GIC_NUM)      (    \
+    (GIC_NUM == 0 || GIC_NUM == 1 ? 0x10011000 :   \
+    (GIC_NUM == 2 || GIC_NUM == 3 ? 0x10012000 :   \
+    (GIC_NUM == 4 || GIC_NUM == 5 ? 0x10018000 :   \
+    (GIC_NUM == 6 || GIC_NUM == 7 ? 0x10019000 :   \
+    (uintptr_t)NULL ))))                           \
+)
+
+#define REAELVIEW_PB_A8_GPTIMER_COUNT       (8)
+
+// Default Timer clock is REFCLK(32.769kHz)
+// To use the 1 MHz TIMCLK, set bit 15 of SYS_CTRL0 in the SP810 System Controller
+#define REFCLK      (32768)     // 32.768kHz
+#define TIMCLK      (1000000)   // 1MHz
+
 #endif
