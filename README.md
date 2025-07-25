@@ -4,22 +4,33 @@ This project is for studying how to develop an operating system running on ARM a
 
 ### - Supported boards
 - RaspberryPI4
+- Realview-PB-A8 (tested only on qemu emulator)
 
 ### - Supported peripherals
 - PL011
 - GIC-400
+- SP804
 
 ## Prerequisite
 
 ### - Install toolchain
 
 - **Use the apt package manager (Linux only)**
-    ```bash
-    sudo apt install crossbuild-essential-arm64
-    ```
-- **Download from official arm toolchain**
+    - aarch32 (for Realview-PB-A8)
+  
+        This method of installing the toolchain does not include GDB for this architecture.
+        ```bash
+        sudo apt install gcc-arm-none-eabi
+        ```
+    - aarch64 (for RaspberryPI4)
+
+        ```bash
+        sudo apt install crossbuild-essential-arm64
+        ```
+        
+- **Download from official arm toolchain** (recommend)
     
-    You can download the toolchain from the official ARM website, and you need to make sure it supports AArch64.
+    You can download the toolchain from the official ARM website, and you need to make sure it supports AArch64 and AArch32.
 
     Download : https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads
 
