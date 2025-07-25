@@ -23,21 +23,22 @@ include $(TARGET_BOARD_PATH)/board.mk
 # include the PERIPHERAL_NAMES variable in board.mk
 # PERIPHERAL_NAMES determines which peripherals need to be built.
 # BOARD_PATH might change depending on the TARGET_BOARD variable.
-BOARD_SRC_PATH 				:= $(TARGET_BOARD_PATH)/src
-BOARD_FIRMWARE_DIR 			:= $(TARGET_BOARD_PATH)/firmware
-BOARD_INCLUDE_DIR 			:= $(TARGET_BOARD_PATH)/include
+BOARD_SRC_PATH 					:= $(TARGET_BOARD_PATH)/src
+BOARD_FIRMWARE_DIR 				:= $(TARGET_BOARD_PATH)/firmware
+BOARD_INCLUDE_DIR 				:= $(TARGET_BOARD_PATH)/include
 
-PERIPHERAL_INCLUDE_DIRS  	:= $(foreach peripheral,$(PERIPHERAL_NAMES),$(shell find $(PERIPHERAL_PATH) -type d -path '*/$(peripheral)/include'))
+PERIPHERAL_COMMON_INCLUDE_DIR 	:= $(PERIPHERAL_PATH)/include
+PERIPHERAL_INCLUDE_DIRS  		:= $(foreach peripheral,$(PERIPHERAL_NAMES),$(shell find $(PERIPHERAL_PATH) -type d -path '*/$(peripheral)/include'))
 
-HAL_INCLUDE_DIR 			:= $(HAL_PATH)/include
+HAL_INCLUDE_DIR 				:= $(HAL_PATH)/include
 
 # Set the path to the BaremetalOS directory, which includes the files that need to be built.
-OS_SRC_DIR 					:= $(OS_PATH)/src
-OS_ARCH_SRC_DIR				:= $(OS_SRC_DIR)/arch/$(KERNEL_ARCH)
-OS_KERNEL_SRC_DIR			:= $(OS_SRC_DIR)/kernel
-OS_INCLUDE_DIR 				:= $(OS_PATH)/include
+OS_SRC_DIR 						:= $(OS_PATH)/src
+OS_ARCH_SRC_DIR					:= $(OS_SRC_DIR)/arch/$(KERNEL_ARCH)
+OS_KERNEL_SRC_DIR				:= $(OS_SRC_DIR)/kernel
+OS_INCLUDE_DIR 					:= $(OS_PATH)/include
 
-BUILD_DIR 					:= $(PROJECT_PATH)/build
+BUILD_DIR 						:= $(PROJECT_PATH)/build
 
 
 # ──────────────────────────────────────────
@@ -54,7 +55,7 @@ GDB					:= $(TOOLCHAIN_PREFIX)-gdb
 ASFLAG 				:= -c -g $(BOARD_AS_FLAG)
 CFLAG  				:= -c -g -Wall -O2
 # This options are for the bare metal environment
-LDFLAG 				:= -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -fno-stack-protector
+LDFLAG 				:= -fno-builtin -ffreestanding -nostartfiles -nostdlib -nodefaultlibs -static -fno-stack-protector
 
 LIB_FLAG			:= -lgcc
 
@@ -94,6 +95,7 @@ LD_SCRIPT 					:= $(TARGET_BOARD_PATH)/linker.ld
 
 BOARD_INCLUDE_FLAG			:= -I$(BOARD_INCLUDE_DIR)
 BOARD_INCLUDE_FLAG			+= -I$(HAL_INCLUDE_DIR)
+BOARD_INCLUDE_FLAG			+= -I$(PERIPHERAL_COMMON_INCLUDE_DIR)
 BOARD_INCLUDE_FLAG			+= $(PERIPHERAL_INCLUDE_DIRS:%=-I%)
 
 OS_INCLUDE_FLAG				:= -I$(HAL_INCLUDE_DIR)
@@ -125,7 +127,7 @@ $(ELF_FILE): $(PERIPHERAL_C_OBJS) $(BOARD_C_OBJS) $(OS_ARCH_AS_OBJS) $(OS_ARCH_C
 # This separates the peripheral code from the BaremetalOS code.
 $(PERIPHERAL_C_OBJS): $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
-	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) -I$(shell dirname $(shell dirname $<))/include -o $@ $<
+	$(CC) -march=$(ARCH) -mcpu=$(MCPU) $(CFLAG) -I$(PERIPHERAL_COMMON_INCLUDE_DIR) -I$(shell dirname $(shell dirname $<))/include -o $@ $<
 
 $(BOARD_C_OBJS): $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)

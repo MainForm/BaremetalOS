@@ -22,7 +22,7 @@ SECTIONS
      * Because bits 0–4 in VBAR_EL1 are reserved. 
      */
     .vector ALIGN(0x20) : {
-        KEEP(*(.vector))
+        KEEP(*(.vector*))
     } > RAM
 
     .data : { 

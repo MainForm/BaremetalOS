@@ -13,23 +13,27 @@
     
 .macro SET_STACK mode:req sp_top:req
     MRS     r0, cpsr
-    BIC     r1, r0, #0x1F
-    LDR     r2, =\mode
-    ORR     r1, r1, r2
-    MSR     cpsr, r1
+    BIC     r0, r0, #0x1F
+    LDR     r1, =\mode
+    ORR     r0, r0, r1
+    MSR     cpsr_c, r0
+    ISB
+
     LDR     sp, =\sp_top
 .endm
 
 .macro SET_VECTOR_BASE base:req
     /* Clear SCTLR.V (bit 13) to allow VBAR usage */
-    MRC     p15, 0, r0, c1, c0, 2
+    MRC     p15, 0, r0, c1, c0, 0
     BIC     r0, r0, #(1 << 13)
-    MCR     p15, 0, r0, c1, c0, 2
+    MCR     p15, 0, r0, c1, c0, 0
+    DSB
     ISB
 
     /* Set VBAR to your vector-table base */
     LDR     r0, =\base
     MCR     p15, 0, r0, c12, c0, 0
+    DSB
     ISB
 .endm
 
@@ -81,11 +85,11 @@ halt:
 
 // This is based on “Table B1-3 The vector tables” in the ARMv7-A and ARMv7-R edition.
 vector_table:
-    B       .       // Reset
-    B       .       // Undef
-    B       .       // Supervisor
-    B       .       // Prefetch
-    B       .       // Data
-    B       .       // Not used 
-    B       .       // IRQ
-    B       .       // FIQ
+    B       .                   // Reset
+    B       .                   // Undef
+    B       .                   // Supervisor
+    B       .                   // Prefetch
+    B       .                   // Data
+    B       .                   // Not used 
+    B       IRQ_Handler         // IRQ
+    B       .                   // FIQ

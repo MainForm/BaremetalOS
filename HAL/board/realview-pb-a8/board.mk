@@ -11,8 +11,8 @@ TOOLCHAIN_PREFIX	:= arm-none-eabi
 
 # PL011 		: UART peripheral
 # GIC-400		: interrupt peripheral
-PERIPHERAL_NAMES 	:= PL011
+PERIPHERAL_NAMES 	:= PL011 PB-A8_GIC
 
 QEMU_MACHINE_NAME 	:= realview-pb-a8
-QEMU_RAM_SIZE		:= 2G
+QEMU_RAM_SIZE		:= 512M
 QEMU_KERNEL			:= kernel.elf
