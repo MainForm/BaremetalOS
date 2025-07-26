@@ -6,6 +6,9 @@
 
 # Target board
 # KERNEL_ARCH, ARCH and MCPU will be set in board.mk
+# supported board)
+# 	- raspberrypi4
+#	- realview-pb-a8
 TARGET_BOARD 		:= realview-pb-a8
 
 # ──────────────────────────────────────────

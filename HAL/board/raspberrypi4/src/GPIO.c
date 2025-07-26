@@ -3,6 +3,10 @@
 #include "BCM2711_peripheral.h"
 #include "BCM2711_GPIO.h"
 
+bool HAL_GPIO_IsEnable(){
+    return true;
+}
+
 void HAL_GPIO_SetFunction(uint32_t pin, GPIO_FUNC function){
     BCM2711_GPIO* gpio = BCM2711_GPIO_GetRegisters(BCM2711_GPIO_BASE);
 

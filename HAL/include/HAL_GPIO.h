@@ -2,6 +2,7 @@
 #define __HAL_GPIO__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 enum {
     LOW =   0,
@@ -18,6 +19,9 @@ typedef enum __GPIO_FUNC{
     GPIO_FUNC_ALT4      = 0b011, 
     GPIO_FUNC_ALT5      = 0b010, 
 } GPIO_FUNC;
+
+__attribute__((weak))
+bool HAL_GPIO_IsEnable();
 
 __attribute__((weak))
 void HAL_GPIO_SetFunction(uint32_t pin, GPIO_FUNC function);
