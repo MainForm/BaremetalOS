@@ -85,7 +85,7 @@ void HAL_GPTimer_SetTimerLoad(uint32_t timerNum,uint32_t value){
 
 uint32_t HAL_GPTimer_GetTimerCounter(uint32_t timerNum){
     if(timerNum != 0){
-        return -1;
+        return 0xFFFFFFFF;
     }
 
     BCM2711_SP804_Timer* timer = BCM2711_SP804_GetRegister();
@@ -95,7 +95,7 @@ uint32_t HAL_GPTimer_GetTimerCounter(uint32_t timerNum){
 
 uint32_t HAL_GPTimer_GetTestValue(uint32_t timerNum){
     if(timerNum != 0){
-        return -1;
+        return 0xFFFFFFFF;
     }
 
     BCM2711_SP804_Timer* timer = BCM2711_SP804_GetRegister();
@@ -111,4 +111,12 @@ void HAL_GPTimer_ClearInterrupt(uint32_t timerNum){
     BCM2711_SP804_Timer* timer = BCM2711_SP804_GetRegister();
 
     SP804_ClearInterrupt((SP804_Timer *)timer);
+}
+
+uint32_t HAL_GPTimer_GetInterruptID(uint32_t timerNum){
+    if(timerNum != 0){
+        return 0xFFFFFFFF;
+    }
+
+    return BCM2711_GIC_GPTIMER_IRQ(timerNum);
 }

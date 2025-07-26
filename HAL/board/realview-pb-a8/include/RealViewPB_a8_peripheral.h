@@ -27,6 +27,21 @@
     (uintptr_t)NULL ))))                           \
 )
 
+#define REALVIEW_PB_A8_GIC_UART_IRQ(UART_NUM)     (     \
+    (UART_NUM == 0 ? 44 :                               \
+    (UART_NUM == 1 ? 45 :                               \
+    (UART_NUM == 2 ? 46 :                               \
+    (UART_NUM == 3 ? 47 :                               \
+    (uintptr_t)NULL ))))                                \
+)
+
+#define REALVIEW_PB_A8_GIC_GPTIMER_IRQ(GPTIMER_NUM)     (   \
+    (GPTIMER_NUM == 0 || GPTIMER_NUM == 1 ? 36 :            \
+    (GPTIMER_NUM == 2 || GPTIMER_NUM == 3 ? 37 :            \
+    (GPTIMER_NUM == 4 || GPTIMER_NUM == 5 ? 73 :            \
+    (GPTIMER_NUM == 6 || GPTIMER_NUM == 7 ? 74 :            \
+    (uintptr_t)NULL ))))                                    \
+)
 
 // Table 4-88 Timer implementation
 // return the -1 when trying to access the invailed timer number

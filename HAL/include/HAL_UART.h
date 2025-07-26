@@ -21,12 +21,15 @@ __attribute__((weak))
 void HAL_UART_SendWord(uint32_t uart_num, uint8_t data);
 
 __attribute__((weak))
-uint8_t HAL_UART_ReceiveWord(uint32_t uart_num);
+uint32_t HAL_UART_ReceiveWord(uint32_t uart_num);
 
 __attribute__((weak))
 void HAL_UART_SendString(uint32_t uart_num, const char * string);
 
 __attribute__((weak))
 void HAL_UART_EnableInterrupt(uint32_t uart_num,UART_IRQ irq);
+
+__attribute__((weak))
+uint32_t HAL_UART_GetInterruptID(uint32_t uart_num);
 
 #endif

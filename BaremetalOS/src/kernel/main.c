@@ -10,9 +10,6 @@
 #define UART0               (0)
 #define TIMER0              (0)
 #define GIC0                (0)
-#define RASP4_IRQ_UART0     (96 + 57)
-#define RV_PB_IRQ_UART0     (44)
-#define RV_PB_IRQ_TIMER0    (36)
 
 void delay(volatile uint32_t i){
     while(i-- > 0);
@@ -53,8 +50,8 @@ int main(){
     HAL_GIC_Initialize(GIC0);
     IRQ_Enable();
 
-    IRQ_AttachInterrupt(GIC0, RV_PB_IRQ_UART0,UART0_Rx_IRQ_Handler);
-    IRQ_AttachInterrupt(GIC0, RV_PB_IRQ_TIMER0,TIMER0_IRQ_Handler);
+    IRQ_AttachInterrupt(GIC0, HAL_UART_GetInterruptID(UART0), UART0_Rx_IRQ_Handler);
+    IRQ_AttachInterrupt(GIC0, HAL_GPTimer_GetInterruptID(TIMER0), TIMER0_IRQ_Handler);
 
     while(1){
         HAL_UART_SendString(UART0,"main func is working\n");

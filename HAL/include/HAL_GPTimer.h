@@ -52,4 +52,7 @@ uint32_t HAL_GPTimer_GetTestValue(uint32_t timerNum);\
 __attribute__((weak))
 void HAL_GPTimer_ClearInterrupt(uint32_t timerNum);
 
+__attribute__((weak))
+uint32_t HAL_GPTimer_GetInterruptID(uint32_t timerNum);
+
 #endif

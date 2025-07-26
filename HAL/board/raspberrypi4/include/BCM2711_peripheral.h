@@ -44,8 +44,27 @@
 
 // This is based on “6.3. GIC-400 interrupt controller” in the bcm2711-peripherals Manual.
 // You can check the base number of the VideoCore peripheral IRQs.
-#define IRQ_VC_IRQ_BASE     (96)
-#define IRQ_UART_NUM        (57)
+
+#define IRQ_ARMC_BASE       (64)
+#define IRQ_ARMC_GPTIMER    (IRQ_ARMC_BASE + 0)
+
+#define IRQ_VC_BASE         (96)
+#define IRQ_VC_UART         (IRQ_VC_BASE + 57)
+
+#define BCM2711_GIC_UART_IRQ(UART_NUM)     (    \
+    (UART_NUM == 0 ? IRQ_VC_UART :              \
+    (UART_NUM == 2 ? IRQ_VC_UART :              \
+    (UART_NUM == 3 ? IRQ_VC_UART :              \
+    (UART_NUM == 4 ? IRQ_VC_UART :              \
+    (UART_NUM == 5 ? IRQ_VC_UART :              \
+    (uintptr_t)NULL )))))                       \
+)
+
+#define BCM2711_GIC_GPTIMER_IRQ(GPTIMER_NUM)     (      \
+    (GPTIMER_NUM == 0 ? IRQ_ARMC_GPTIMER :              \
+    (uintptr_t)NULL )                                   \
+)
+
 
 // ────────────────────────────────────────────
 // Timer peripheral
