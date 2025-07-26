@@ -4,15 +4,15 @@
 #include <stdint.h>
 
 __attribute__((weak))
-void HAL_GIC_Initialize();
+void HAL_GIC_Initialize(uint32_t gic_num);
 
 __attribute__((weak))
-void HAL_GIC_EnableInterrupt(uint32_t irq_num);
+void HAL_GIC_EnableInterrupt(uint32_t gic_num,uint32_t irq_num);
 
 __attribute__((weak))
-uint32_t HAL_GIC_GetAcknowledge();
+uint32_t HAL_GIC_GetAcknowledge(uint32_t gic_num);
 
 __attribute__((weak))
-void HAL_GIC_EndIRQ(uint32_t irqID);
+void HAL_GIC_EndIRQ(uint32_t gic_num,uint32_t irqID);
 
 #endif

@@ -5,10 +5,10 @@
 
 static IRQ_Handler_Callback IRQ_Handler_Callbacks[IRQ_MAXIMUM_COUNT];
 
-void IRQ_AttachInterrupt(int irq_num, IRQ_Handler_Callback callback){
+void IRQ_AttachInterrupt(int gic_num,int irq_num, IRQ_Handler_Callback callback){
 
     if(IRQ_IsEnableInterrupt(irq_num) == false){
-       HAL_GIC_EnableInterrupt(irq_num);
+       HAL_GIC_EnableInterrupt(gic_num, irq_num);
     }
 
     IRQ_Handler_Callbacks[irq_num] = callback;
