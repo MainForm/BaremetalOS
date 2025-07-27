@@ -46,3 +46,7 @@ void HAL_GIC_EndIRQ(uint32_t gic_num, uint32_t irqID){
 
     PB_A8_GIC_EndIRQ(gic,irqID);
 }
+
+inline uint32_t HAL_GIC_GetCountGIC(){
+    return REALVIEW_PB_A8_GIC_COUNT;
+}

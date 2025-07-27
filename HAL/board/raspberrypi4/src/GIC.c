@@ -27,3 +27,7 @@ void HAL_GIC_EndIRQ(uint32_t gic_num,uint32_t irqID){
 
     GIC400_EndIRQ(gic400,irqID);
 }
+
+inline uint32_t HAL_GIC_GetCountGIC(){
+    return BCM2711_GIC_COUNT;
+}

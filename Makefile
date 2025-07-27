@@ -119,7 +119,6 @@ ELF_FILE 			:= kernel.elf
 all: $(TARGET)
 
 $(TARGET): $(ELF_FILE)
-	@mkdir -p $(BUILD_DIR)/output
 	$(OBJCOPY) -O binary $(BUILD_DIR)/$< $(BUILD_DIR)/$@
 
 $(ELF_FILE): $(PERIPHERAL_C_OBJS) $(BOARD_C_OBJS) $(OS_ARCH_AS_OBJS) $(OS_ARCH_C_OBJS) $(OS_KERNEL_C_OBJS)

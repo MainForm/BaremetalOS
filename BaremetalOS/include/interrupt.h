@@ -16,4 +16,6 @@ bool IRQ_IsEnableInterrupt(int irq_num);
 void IRQ_AttachInterrupt(int gic_num, int irq_num, IRQ_Handler_Callback callback);
 void IRQ_CallHandlerCallback(int irq_num);
 
+void IRQ_HandlerCallback();
+
 #endif

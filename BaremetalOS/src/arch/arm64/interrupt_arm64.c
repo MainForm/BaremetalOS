@@ -10,10 +10,6 @@ void IRQ_Enable(){
     );
 }
 
-void IRQ_Handler(){
-    uint32_t irqNum = HAL_GIC_GetAcknowledge(0);
-
-    IRQ_CallHandlerCallback(irqNum);
-
-    HAL_GIC_EndIRQ(0,irqNum);
+void IRQ_ARM64_Handler(){
+    IRQ_HandlerCallback();
 }

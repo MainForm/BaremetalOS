@@ -200,7 +200,7 @@ irq_start:
 
     STP     x10, xzr,    [sp, #-16]!
 
-    BL      IRQ_Handler
+    BL      IRQ_ARM64_Handler
 
 irq_restore:
     LDP     x11, xzr,    [sp], #16

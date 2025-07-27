@@ -27,6 +27,8 @@
     (uintptr_t)NULL ))))                           \
 )
 
+#define REALVIEW_PB_A8_GIC_COUNT        (4)
+
 #define REALVIEW_PB_A8_GIC_UART_IRQ(UART_NUM)     (     \
     (UART_NUM == 0 ? 44 :                               \
     (UART_NUM == 1 ? 45 :                               \

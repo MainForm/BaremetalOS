@@ -41,6 +41,7 @@
 
 // GIC base address
 #define BCM2711_GIC_BASE                (0xFF840000)
+#define BCM2711_GIC_COUNT               (1)
 
 // This is based on “6.3. GIC-400 interrupt controller” in the bcm2711-peripherals Manual.
 // You can check the base number of the VideoCore peripheral IRQs.

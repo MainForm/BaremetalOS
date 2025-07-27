@@ -91,5 +91,5 @@ vector_table:
     B       .                   // Prefetch
     B       .                   // Data
     B       .                   // Not used 
-    B       IRQ_Handler         // IRQ
+    B       IRQ_ARM_Handler     // IRQ
     B       .                   // FIQ
