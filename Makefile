@@ -9,7 +9,7 @@
 # supported board)
 # 	- raspberrypi4
 #	- realview-pb-a8
-TARGET_BOARD 		:= realview-pb-a8
+TARGET_BOARD 		:= raspberrypi4
 
 # ──────────────────────────────────────────
 # 2) Path & Directory

@@ -5,12 +5,17 @@
 #include "HAL_GIC.h"
 #include "HAL_GPTimer.h"
 #include "HAL_GPIO.h"
+#include "HAL_SystemTimer.h"
 
 #include "interrupt.h"
 
 #define UART0               (0)
 #define TIMER0              (0)
 #define GIC0                (0)
+// System Timer 0 is already used for something else.
+#define SYSTIMER1           (1)
+
+#define SYSTIMER0_INTERVAL  (1000)
 
 #define RASP4_UART0_TX      (14)
 #define RASP4_UART0_RX      (15)
@@ -25,18 +30,32 @@ void UART0_Rx_IRQ_Handler(){
     HAL_UART_SendWord(UART0,data);
 }
 
-void TIMER0_IRQ_Handler(){
-    static uint32_t cnt = 0;
+static uint32_t cnt = 0;
+// Caution)
+// Clearing the system timer IRQ and updating the compare register must be done at the beginning of the handler.
+void SystemTimer_IRQ_Handler(){
+    HAL_SystemTimer_ClearInterrupt(SYSTIMER1);
+    HAL_SystemTimer_SetNextTick(SYSTIMER1,SYSTIMER0_INTERVAL);
+    uint32_t counter = HAL_SystemTimer_GetLowCounter();
+    uint32_t compare = HAL_SystemTimer_GetCompare(SYSTIMER1);
 
-    if(cnt >= 100){
+    if(cnt >= 1000){
+        char buf[16];
         HAL_UART_SendString(UART0,"Timer is working\n");
+        itoa(counter,buf,10);
+        HAL_UART_SendString(UART0,"counter : ");
+        HAL_UART_SendString(UART0,buf);
+        HAL_UART_SendWord(UART0,'\n');
 
+        itoa(compare,buf,10);
+        HAL_UART_SendString(UART0,"compare : ");
+        HAL_UART_SendString(UART0,buf);
+        HAL_UART_SendWord(UART0,'\n');
+        HAL_UART_SendWord(UART0,'\n');
         cnt = 0;
     }
 
     ++cnt;
-
-    HAL_GPTimer_ClearInterrupt(TIMER0);
 }
 
 int main(){
@@ -48,24 +67,18 @@ int main(){
         HAL_GPIO_SetFunction(RASP4_UART0_TX, GPIO_FUNC_ALT0);
     }
 
-    HAL_GPTimer_Initialize(TIMER0);
-    HAL_GPTimer_SetTimerMode(TIMER0,GPTIMER_MODE_PERIODIC);
-    HAL_GPTimer_SetTimerSize(TIMER0,GPTIMER_SIZE_32BITS);
-    HAL_GPTimer_SetTimerPrescale(TIMER0, GPTIMER_PRESCALE_16);
-    HAL_GPTimer_SetTimerLoad(TIMER0,1000);
-    HAL_GPTimer_EnableInterrupt(TIMER0,true);
-    HAL_GPTimer_EnableTimer(TIMER0,true);
 
     HAL_GIC_Initialize(GIC0);
     IRQ_Enable();
 
     IRQ_AttachInterrupt(GIC0, HAL_UART_GetInterruptID(UART0), UART0_Rx_IRQ_Handler);
-    IRQ_AttachInterrupt(GIC0, HAL_GPTimer_GetInterruptID(TIMER0), TIMER0_IRQ_Handler);
 
-    while(1){
-        HAL_UART_SendString(UART0,"main func is working\n");
-        delay(0xC000000);
+    if(HAL_SystemTimer_IsEnable()){
+        HAL_SystemTimer_Initailize(SYSTIMER1,SYSTIMER0_INTERVAL);
+        IRQ_AttachInterrupt(GIC0, HAL_SystemTimer_GetInterruptID(SYSTIMER1), SystemTimer_IRQ_Handler);
     }
+
+    while(1){}
 
     return 0;
 }

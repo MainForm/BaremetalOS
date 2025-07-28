@@ -52,6 +52,11 @@
 #define IRQ_VC_BASE         (96)
 #define IRQ_VC_UART         (IRQ_VC_BASE + 57)
 
+#define IRQ_SYSTEM_TIMER0   (IRQ_VC_BASE + 0)
+#define IRQ_SYSTEM_TIMER1   (IRQ_VC_BASE + 1)
+#define IRQ_SYSTEM_TIMER2   (IRQ_VC_BASE + 2)
+#define IRQ_SYSTEM_TIMER3   (IRQ_VC_BASE + 3)
+
 #define BCM2711_GIC_UART_IRQ(UART_NUM)     (    \
     (UART_NUM == 0 ? IRQ_VC_UART :              \
     (UART_NUM == 2 ? IRQ_VC_UART :              \
@@ -61,11 +66,26 @@
     (uintptr_t)NULL )))))                       \
 )
 
+#define BCM2711_GIC_SYSTEM_TIMER_IRQ(TIMER_NUM)  (      \
+    (TIMER_NUM == 0 ? IRQ_SYSTEM_TIMER0 :               \
+    (TIMER_NUM == 1 ? IRQ_SYSTEM_TIMER1 :               \
+    (TIMER_NUM == 2 ? IRQ_SYSTEM_TIMER2 :               \
+    (TIMER_NUM == 3 ? IRQ_SYSTEM_TIMER3 :               \
+    (uintptr_t)NULL ))))                                \
+)
+
 #define BCM2711_GIC_GPTIMER_IRQ(GPTIMER_NUM)     (      \
     (GPTIMER_NUM == 0 ? IRQ_ARMC_GPTIMER :              \
     (uintptr_t)NULL )                                   \
 )
 
+// ────────────────────────────────────────────
+// System Timer peripheral
+// ────────────────────────────────────────────
+
+#define BCM2711_SYSTEM_TIMER_BASE               (0xFE003000)
+
+#define BCM2711_SYSTEM_TIMER_COUNT              (4)
 
 // ────────────────────────────────────────────
 // Timer peripheral
