@@ -36,7 +36,8 @@ void SP804_SetTimerMode(SP804_Timer* timer, SP804_TIMER_MODE mode){
         timer->TimerControl.OneShot     = 1;
         break;
     default:
-        
+
+        break;
     }
 }
 
