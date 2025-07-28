@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include "custom_libc/stdlib.h"
+#include "custom_libc/stdio.h"
 #include <stdbool.h>
 
 #include "HAL_UART.h"
@@ -67,7 +68,6 @@ int main(){
         HAL_GPIO_SetFunction(RASP4_UART0_TX, GPIO_FUNC_ALT0);
     }
 
-
     HAL_GIC_Initialize(GIC0);
     IRQ_Enable();
 
@@ -78,7 +78,12 @@ int main(){
         IRQ_AttachInterrupt(GIC0, HAL_SystemTimer_GetInterruptID(SYSTIMER1), SystemTimer_IRQ_Handler);
     }
 
-    while(1){}
+    int value = 0x1A2B;
+
+    while(1){
+        uprintf(UART0, "n : 0x%x\n", value);
+        delay(0x8000000);
+    }
 
     return 0;
 }

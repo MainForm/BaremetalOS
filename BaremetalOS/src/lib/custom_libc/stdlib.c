@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include "custom_libc/stdlib.h"
+#include <stdint.h>
 #include <stdbool.h>
 
 char* itoa(uint32_t value,char* str,int base){

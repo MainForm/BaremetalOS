@@ -39,6 +39,7 @@ HAL_INCLUDE_DIR 				:= $(HAL_PATH)/include
 OS_SRC_DIR 						:= $(OS_PATH)/src
 OS_ARCH_SRC_DIR					:= $(OS_SRC_DIR)/arch/$(KERNEL_ARCH)
 OS_KERNEL_SRC_DIR				:= $(OS_SRC_DIR)/kernel
+OS_LIB_SRC_DIR					:= $(OS_SRC_DIR)/lib	
 OS_INCLUDE_DIR 					:= $(OS_PATH)/include
 
 BUILD_DIR 						:= $(PROJECT_PATH)/build
@@ -84,10 +85,11 @@ BOARD_C_OBJS 		:= $(BOARD_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
 OS_ARCH_AS_SRCS 	:= $(shell find $(OS_ARCH_SRC_DIR) -name '*.S')
 OS_ARCH_AS_OBJS 	:= $(OS_ARCH_AS_SRCS:$(PROJECT_PATH)/%.S=$(BUILD_DIR)/%.os)
 
-OS_ARCH_C_SRCS 	:= $(shell find $(OS_ARCH_SRC_DIR) -name '*.c')
-OS_ARCH_C_OBJS 	:= $(OS_ARCH_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
+OS_ARCH_C_SRCS 		:= $(shell find $(OS_ARCH_SRC_DIR) -name '*.c')
+OS_ARCH_C_OBJS 		:= $(OS_ARCH_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
 
 OS_KERNEL_C_SRCS 	:= $(shell find $(OS_KERNEL_SRC_DIR) -name '*.c')
+OS_KERNEL_C_SRCS 	+= $(shell find $(OS_LIB_SRC_DIR) -name '*.c')
 OS_KERNEL_C_OBJS 	:= $(OS_KERNEL_C_SRCS:$(PROJECT_PATH)/%.c=$(BUILD_DIR)/%.o)
 
 # ──────────────────────────────────────────
