@@ -1,4 +1,4 @@
-#include "BCM2711_GPIO.h"
+#include "GPIO/BCM2711_GPIO.h"
 
 BCM2711_GPIO* BCM2711_GPIO_GetRegisters(uintptr_t BaseAddress){
     return (BCM2711_GPIO*)BaseAddress;

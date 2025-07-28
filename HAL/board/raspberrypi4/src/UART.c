@@ -1,6 +1,6 @@
 #include "HAL_UART.h"
-#include "PL011.h"
 #include "BCM2711_peripheral.h"
+#include "UART/PL011.h"
 
 void HAL_UART_Initialize(uint32_t uart_num, uint32_t baudrate){
     PL011* pl011 = PL011_GetRegisters(BCM2711_UART_BASE(uart_num));

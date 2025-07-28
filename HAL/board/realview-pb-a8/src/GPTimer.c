@@ -1,7 +1,7 @@
 #include "HAL_GPTimer.h"
 
 #include "RealViewPB_a8_peripheral.h"
-#include "SP804.h"
+#include "Timer/SP804.h"
 
 SP804_Timer* SP804_GetRegister(uint32_t timer_num){
     return (SP804_Timer*)(REALVIEW_PB_A8_GPTIMER_BASE(timer_num));

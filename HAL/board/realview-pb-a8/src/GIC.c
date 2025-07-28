@@ -1,7 +1,7 @@
 #include "HAL_GIC.h"
 
 #include "RealViewPB_a8_peripheral.h"
-#include "PB-A8_GIC.h"
+#include "GIC/PB-A8_GIC.h"
 
 #include "HAL_UART.h"
 #include "stdlib.h"

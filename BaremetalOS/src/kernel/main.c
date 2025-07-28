@@ -80,6 +80,7 @@ int main(){
 
     int value = 0x1A2B;
 
+    HAL_UART_SendString(UART0, "Baremetal OS is running!\n");
     while(1){
         uprintf(UART0, "n : 0x%x\n", value);
         delay(0x8000000);

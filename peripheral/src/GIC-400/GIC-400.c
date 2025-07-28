@@ -1,4 +1,4 @@
-#include "GIC-400.h"
+#include "GIC/GIC-400.h"
 
 GIC400* GIC400_GetRegisters(uintptr_t BaseAddress){
     return (GIC400*)BaseAddress;

@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
-#include "SP804.h"
+#include "Timer/SP804.h"
 
 // Default APB Clock of BCM2711 :       250MHz
 #define BCM2711_APB_CLOCK               (250000000)

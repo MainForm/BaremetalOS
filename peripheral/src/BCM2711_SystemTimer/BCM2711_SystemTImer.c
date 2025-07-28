@@ -1,4 +1,4 @@
-#include "BCM2711_SystemTimer.h"
+#include "Timer/BCM2711_SystemTimer.h"
 
 inline uint32_t BCM2711_SystemTimer_GetLowCounter(BCM2711_SystemTimer* SystemTimer){
     return SystemTimer->CLO.value;

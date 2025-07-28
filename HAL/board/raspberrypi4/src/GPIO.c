@@ -1,7 +1,7 @@
 #include "HAL_GPIO.h"
 
 #include "BCM2711_peripheral.h"
-#include "BCM2711_GPIO.h"
+#include "GPIO/BCM2711_GPIO.h"
 
 bool HAL_GPIO_IsEnable(){
     return true;

@@ -1,4 +1,4 @@
-#include "SP804.h"
+#include "Timer/SP804.h"
 
 volatile SP804_Timer* SP804_GetTimerRegister(uintptr_t address){
     return (volatile SP804_Timer*)address;

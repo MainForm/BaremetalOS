@@ -1,7 +1,7 @@
 #include "HAL_GIC.h"
 
 #include "BCM2711_peripheral.h"
-#include "GIC-400.h"
+#include "GIC/GIC-400.h"
 
 
 void HAL_GIC_Initialize(uint32_t gic_num){

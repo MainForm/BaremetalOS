@@ -1,4 +1,4 @@
-#include "PB-A8_GIC.h"
+#include "GIC/PB-A8_GIC.h"
 
 PB_A8_GIC* PB_A8_GIC_GetRegisters(uintptr_t BaseAddress){
     return (PB_A8_GIC*)BaseAddress;
